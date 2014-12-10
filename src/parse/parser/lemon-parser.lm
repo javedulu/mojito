@@ -1,0 +1,47 @@
+%token_prefix           UMOD_LEXEME_TYPE_
+%token_type             {lex::Lexeme *}
+%extra_argument         {parser::Parser *parser}
+%name                   umodParse
+
+%include {
+    #include <cassert>
+    #include <cstdio>
+    #include <vector>
+    #include <string>
+    #include "lexeme.h"
+    #include "parser.h"
+
+    using namespace umod;
+
+}
+
+%syntax_error {
+    int n = sizeof(yyTokenName)/ sizeof(*yyTokenName);
+    for (int i = 0; i< n; i++)
+    {
+        int a = yy_find_shift_action(yypParser, static_cast<YYCODETYPE>(i));
+        if (a < YY_ERROR_ACTION)
+        {
+            parser->errors().push_back(yyTokenName[i]);
+        }
+    }
+    parser->error(true);
+}
+
+%left If Var Else Null True False Return Function Undefined.
+
+%left Plus Minus Mul Div Mod.
+
+%left Assign PlusAssign MinusAssign MulAssign DivAssign ModAssign.
+
+%left Greater GreaterOrEqual Lesser LesserOrEqual Equal NotEqual.
+
+%left Not Inv Incrementation Decrementation.
+
+%left LParen RParen LBracket RBracket LBrace RBrace.
+
+%left QuestionMark Dot.
+
+%left Semicolon Colon Comma.
+
+%left Identifier Number String.
