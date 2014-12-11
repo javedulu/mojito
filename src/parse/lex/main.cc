@@ -7,7 +7,7 @@ using namespace umod::lex;
 int main(int argc, char **argv)
 {
     
-    std::string filename = (argc > 1 ? argv[1]:"/Users/javedulu/Desktop/Rotational.mo");
+    std::string filename = (argc > 1 ? argv[1]:"/Users/javedulu/Desktop/a.mo");
     
     std::ifstream ifs(filename, std::ifstream::in);
     std::string istr((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>()); //
@@ -21,12 +21,16 @@ int main(int argc, char **argv)
         if (lexeme->type() != Lexeme::Type::Spaces && lexeme->type() != Lexeme::Type::Newline)
         {
             //EcmaParse(m_yyp, static_cast<int>(lexeme->type()), lexeme.get(), this);
-            if (lexeme->type() == Lexeme::Type::End)
+            if (lexeme->type() == Lexeme::Type::Eof)
             {
                 parsing = false;
             }
             else{
-                //std::cout << lexeme->as<std::string>() << "   @ >> "<< lexeme->position().first<< ":"<<  lexeme->position().second << std::endl;
+                std::cout << lexeme->as<std::string>()
+                << " @>>"
+                << lexeme->position().first<< ":" <<  lexeme->position().second
+                << " @type:"<< (int) lexeme->type()
+                << std::endl;
             }
         }
     }
