@@ -8,6 +8,7 @@
     #include <cstdio>
     #include <vector>
     #include <string>
+    #include <iostream>
     #include "lexeme.h"
     #include "parser.h"
     using namespace umod;
@@ -25,33 +26,26 @@
     parser->error(true);
 }
 
-%left Plus Minus Mul Div Mod.
+%left PLUS MINUS MUL DIV.
 
-%left Assign PlusAssign MinusAssign MulAssign DivAssign ModAssign.
+%left ASSIGN PLUSASSIGN MINUSASSIGN MULASSIGN DIVASSIGN.
 
-%left Greater GreaterOrEqual Lesser LesserOrEqual Equal NotEqual.
+%left GREATER GREATEROREQUAL LESSER LESSEROREQUAL EQUAL NOTEQUAL.
 
-%left Not Inv Incrementation Decrementation.
+%left NOT INV INCREMENTATION DECREMENTATION.
 
-%left LParen RParen LBracket RBracket LBrace RBrace.
+%left LPAREN RPAREN LBRACKET RBRACKET LBRACE RBRACE.
 
-%left QuestionMark Dot.
+%left QUESTIONMARK DOT.
 
-%left Semicolon Colon Comma.
+%left SEMICOLON COLON COMMA.
 
-%left Identifier Number String.
+%left IDENT NUMBER FLOAT STRING COMMENT.
 
-program ::= expr(A).   { std::cout << "Result=" << A << std::endl; }
+program ::= expr(A).   {
+           std::cout << "Result.value=" << A << std::endl;
+           std::cout << "Result.n=" << A << std::endl;
+}
 
-expr(A) ::= expr(B) Minus expr(C).  { A = B - C; }
-expr(A) ::= expr(B) Plus  expr(C).   { A = B + C; }
-expr(A) ::= expr(B) Mul   expr(C).  { A = B * C; }
-expr(A) ::= expr(B) Div   expr(C).  {
-    if(C != 0){
-        A = B / C;
-    }
-    else{
-        std::cout << "divide by zero" << std::endl;
-    }
-}  /* end of DIVIDE */
-expr(A) ::= Number(B). { A = B; }
+
+expr(A) ::= IDENT(B). { A = B; }

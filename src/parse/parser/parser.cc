@@ -28,11 +28,11 @@ void Parser::exec()
     while (parsing && !error())
     {
         lexeme.reset(m_lexer.consume());
-        if ((lexeme->type() != lex::Lexeme::Type::Spaces) &&
-            (lexeme->type()!=lex::Lexeme::Type::Newline))
+        if ((lexeme->type() != lex::Lexeme::Type::SPACES) &&
+            (lexeme->type()!=lex::Lexeme::Type::NEWLINE))
         {
             umodParse(m_yyp, static_cast<int>(lexeme->type()), lexeme.get(), this);
-            if (lexeme->type() == lex::Lexeme::Type::End)
+            if (lexeme->type() == lex::Lexeme::Type::EOI)
             {
                 parsing=false;
             }
