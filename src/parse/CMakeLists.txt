@@ -8,12 +8,16 @@ add_custom_command(OUTPUT
     DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/lex/lexer.rl"
     )
 	
+IF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/parser/lemon-parser.cc)
+    FILE(REMOVE "${CMAKE_CURRENT_SOURCE_DIR}/parser/lemon-parser.cc")
+ENDIF()
 add_custom_command(OUTPUT
     lemon-parser.cc
     COMMAND /usr/local/bin/lemon "${CMAKE_CURRENT_SOURCE_DIR}/parser/lemon-parser.lm"
-    COMMAND rm    "${CMAKE_CURRENT_SOURCE_DIR}/parser/lemon-parser.out"
+    #COMMAND rm    "${CMAKE_CURRENT_SOURCE_DIR}/parser/lemon-parser.out"
+    COMMAND mv    "${CMAKE_CURRENT_SOURCE_DIR}/parser/lemon-parser.c" "${CMAKE_CURRENT_SOURCE_DIR}/parser/lemon-parser.cc"
     COMMAND cp    "${CMAKE_CURRENT_SOURCE_DIR}/parser/lemon-parser.h" "${CMAKE_CURRENT_BINARY_DIR}/lemon-parser.h"
-    COMMAND cp    "${CMAKE_CURRENT_SOURCE_DIR}/parser/lemon-parser.c" "${CMAKE_CURRENT_BINARY_DIR}/lemon-parser.cc"
+    COMMAND cp    "${CMAKE_CURRENT_SOURCE_DIR}/parser/lemon-parser.cc" "${CMAKE_CURRENT_BINARY_DIR}/lemon-parser.cc"
     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/parser"
     DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/parser/lemon-parser.lm"
 )

@@ -58,114 +58,104 @@ Lexeme *Lexer::consume(void)
         comment             = linecomment | blockcomment;
 
         main := |*
-            'algorithm'            => { type = Lexeme::Type::Algorithm; fbreak; };
-            'discrete'             => { type = Lexeme::Type::Discrete; fbreak; };
-            'false'                => { type = Lexeme::Type::False; fbreak; };
-            'loop'                 => { type = Lexeme::Type::Loop; fbreak; };
-            'pure'                 => { type = Lexeme::Type::Pure; fbreak; };
-            'and'                  => { type = Lexeme::Type::And; fbreak; };
-            'each'                 => { type = Lexeme::Type::Each; fbreak; };
-            'final'                => { type = Lexeme::Type::Final; fbreak; };
-            'model'                => { type = Lexeme::Type::Model; fbreak; };
-            'record'               => { type = Lexeme::Type::Record; fbreak; };
-            'annotation'           => { type = Lexeme::Type::Annotation; fbreak; };
-            'else'                 => { type = Lexeme::Type::Else; fbreak; };
-            'flow'                 => { type = Lexeme::Type::Flow; fbreak; };
-            'not'                  => { type = Lexeme::Type::Not; fbreak; };
-            'redeclare'            => { type = Lexeme::Type::Redeclare; fbreak; };
-            'assert'               => { type = Lexeme::Type::Assert; fbreak; };
-            'elseif'               => { type = Lexeme::Type::Elseif; fbreak; };
-            'for'                  => { type = Lexeme::Type::For; fbreak; };
-            'operator'             => { type = Lexeme::Type::Operator; fbreak; };
-            'replaceable'          => { type = Lexeme::Type::Replaceable; fbreak; };
-            'block'                => { type = Lexeme::Type::Block; fbreak; };
-            'elsewhen'             => { type = Lexeme::Type::Elsewhen; fbreak; };
-            'function'             => { type = Lexeme::Type::Function; fbreak; };
-            'or'                   => { type = Lexeme::Type::Or; fbreak; };
-            'return'               => { type = Lexeme::Type::Return; fbreak; };
-            'break'                => { type = Lexeme::Type::Break; fbreak; };
-            'encapsulated'         => { type = Lexeme::Type::Encapsulated; fbreak; };
-            'if'                   => { type = Lexeme::Type::If; fbreak; };
-            'outer'                => { type = Lexeme::Type::Outer; fbreak; };
-            'stream'               => { type = Lexeme::Type::Stream; fbreak; };
-            'class'                => { type = Lexeme::Type::Class; fbreak; };
-            'end'                  => { type = Lexeme::Type::End; fbreak; };
-            'import'               => { type = Lexeme::Type::Import; fbreak; };
-            'output'               => { type = Lexeme::Type::Output; fbreak; };
-            'then'                 => { type = Lexeme::Type::Then; fbreak; };
-            'connect'              => { type = Lexeme::Type::Connect; fbreak; };
-            'enumeration'          => { type = Lexeme::Type::Enumeration; fbreak; };
-            'impure'               => { type = Lexeme::Type::Impure; fbreak; };
-            'package'              => { type = Lexeme::Type::Package; fbreak; };
-            'true'                 => { type = Lexeme::Type::True; fbreak; };
-            'connector'            => { type = Lexeme::Type::Connector; fbreak; };
-            'equation'             => { type = Lexeme::Type::Equation; fbreak; };
-            'in'                   => { type = Lexeme::Type::In; fbreak; };
-            'parameter'            => { type = Lexeme::Type::Parameter; fbreak; };
-            'type'                 => { type = Lexeme::Type::Type; fbreak; };
-            'constant'             => { type = Lexeme::Type::Constant; fbreak; };
-            'expandable'           => { type = Lexeme::Type::Expandable; fbreak; };
-            'initial'              => { type = Lexeme::Type::Initial; fbreak; };
-            'partial'              => { type = Lexeme::Type::Partial; fbreak; };
-            'when'                 => { type = Lexeme::Type::When; fbreak; };
-            'constrainedby'        => { type = Lexeme::Type::Constrainedby; fbreak; };
-            'extends'              => { type = Lexeme::Type::Extends; fbreak; };
-            'inner'                => { type = Lexeme::Type::Inner; fbreak; };
-            'protected'            => { type = Lexeme::Type::Protected; fbreak; };
-            'while'                => { type = Lexeme::Type::While; fbreak; };
-            'der'                  => { type = Lexeme::Type::Der; fbreak; };
-            'external'             => { type = Lexeme::Type::External; fbreak; };
-            'input'                => { type = Lexeme::Type::Input; fbreak; };
-            'public'               => { type = Lexeme::Type::Public; fbreak; };
-            'within'               => { type = Lexeme::Type::Within; fbreak; };
-
-            '+'             => { type = Lexeme::Type::Plus; fbreak; };
-            '-'             => { type = Lexeme::Type::Minus; fbreak; };
-            '*'             => { type = Lexeme::Type::Mul; fbreak; };
-            '/'             => { type = Lexeme::Type::Div; fbreak; };
-            '^'             => { type = Lexeme::Type::Exponent; fbreak; };
-
-            '='             => { type = Lexeme::Type::Assign; fbreak; };
-            '+='            => { type = Lexeme::Type::PlusAssign; fbreak; };
-            '-='            => { type = Lexeme::Type::MinusAssign; fbreak; };
-            '*='            => { type = Lexeme::Type::MulAssign; fbreak; };
-            '/='            => { type = Lexeme::Type::DivAssign; fbreak; };
-
-            '>'             => { type = Lexeme::Type::Greater; fbreak; };
-            '>='            => { type = Lexeme::Type::GreaterOrEqual; fbreak; };
-            '<'             => { type = Lexeme::Type::Lesser; fbreak; };
-            '<='            => { type = Lexeme::Type::LesserOrEqual; fbreak; };
-            '=='            => { type = Lexeme::Type::Equal; fbreak; };
-            '<>'            => { type = Lexeme::Type::NotEqual; fbreak; };
-
-            '!'             => { type = Lexeme::Type::Negate; fbreak; };
-            '~'             => { type = Lexeme::Type::Inv; fbreak; };
-            '++'            => { type = Lexeme::Type::Incrementation; fbreak; };
-            '--'            => { type = Lexeme::Type::Decrementation; fbreak; };
-
-            '('             => { type = Lexeme::Type::LParen; fbreak; };
-            ')'             => { type = Lexeme::Type::RParen; fbreak; };
-            '['             => { type = Lexeme::Type::LBracket; fbreak; };
-            ']'             => { type = Lexeme::Type::RBracket; fbreak; };
-            '{'             => { type = Lexeme::Type::LBrace; fbreak; };
-            '}'             => { type = Lexeme::Type::RBrace; fbreak; };
-
-            '?'             => { type = Lexeme::Type::QuestionMark; fbreak; };
-            '.'             => { type = Lexeme::Type::Dot; fbreak; };
-
-            ';'             => { type = Lexeme::Type::Semicolon; fbreak; };
-            ':'             => { type = Lexeme::Type::Colon; fbreak; };
-            ','             => { type = Lexeme::Type::Comma; fbreak; };
-
-            ident           => { type = Lexeme::Type::Ident; fbreak; };
-            float           => { type = Lexeme::Type::Float; fbreak; };
-            number          => { type = Lexeme::Type::Number; fbreak; };
-            string          => { type = Lexeme::Type::String; fbreak; };
-
-            spaces          => { type = Lexeme::Type::Spaces; fbreak; };
-            newline         => { type = Lexeme::Type::Newline; fbreak; };
-
-            comment     => { type = Lexeme::Type::Comment; fbreak; };
+            '!'                    => { type = Lexeme::Type::NEGATE; fbreak; };
+            '('                    => { type = Lexeme::Type::LPAREN; fbreak; };
+            ')'                    => { type = Lexeme::Type::RPAREN; fbreak; };
+            '*'                    => { type = Lexeme::Type::MUL; fbreak; };
+            '*='                   => { type = Lexeme::Type::MULASSIGN; fbreak; };
+            '+'                    => { type = Lexeme::Type::PLUS; fbreak; };
+            '++'                   => { type = Lexeme::Type::INCREMENTATION; fbreak; };
+            '+='                   => { type = Lexeme::Type::PLUSASSIGN; fbreak; };
+            ','                    => { type = Lexeme::Type::COMMA; fbreak; };
+            '-'                    => { type = Lexeme::Type::MINUS; fbreak; };
+            '--'                   => { type = Lexeme::Type::DECREMENTATION; fbreak; };
+            '-='                   => { type = Lexeme::Type::MINUSASSIGN; fbreak; };
+            '.'                    => { type = Lexeme::Type::DOT; fbreak; };
+            '/'                    => { type = Lexeme::Type::DIV; fbreak; };
+            '/='                   => { type = Lexeme::Type::DIVASSIGN; fbreak; };
+            ':'                    => { type = Lexeme::Type::COLON; fbreak; };
+            ';'                    => { type = Lexeme::Type::SEMICOLON; fbreak; };
+            '<'                    => { type = Lexeme::Type::LESSER; fbreak; };
+            '<='                   => { type = Lexeme::Type::LESSEROREQUAL; fbreak; };
+            '<>'                   => { type = Lexeme::Type::NOTEQUAL; fbreak; };
+            '='                    => { type = Lexeme::Type::ASSIGN; fbreak; };
+            '=='                   => { type = Lexeme::Type::EQUAL; fbreak; };
+            '>'                    => { type = Lexeme::Type::GREATER; fbreak; };
+            '>='                   => { type = Lexeme::Type::GREATEROREQUAL; fbreak; };
+            '?'                    => { type = Lexeme::Type::QUESTIONMARK; fbreak; };
+            '['                    => { type = Lexeme::Type::LBRACKET; fbreak; };
+            ']'                    => { type = Lexeme::Type::RBRACKET; fbreak; };
+            '^'                    => { type = Lexeme::Type::EXPONENT; fbreak; };
+            'algorithm'            => { type = Lexeme::Type::ALGORITHM; fbreak; };
+            'and'                  => { type = Lexeme::Type::AND; fbreak; };
+            'annotation'           => { type = Lexeme::Type::ANNOTATION; fbreak; };
+            'assert'               => { type = Lexeme::Type::ASSERT; fbreak; };
+            'block'                => { type = Lexeme::Type::BLOCK; fbreak; };
+            'break'                => { type = Lexeme::Type::BREAK; fbreak; };
+            'class'                => { type = Lexeme::Type::CLASS; fbreak; };
+            'connect'              => { type = Lexeme::Type::CONNECT; fbreak; };
+            'connector'            => { type = Lexeme::Type::CONNECTOR; fbreak; };
+            'constant'             => { type = Lexeme::Type::CONSTANT; fbreak; };
+            'constrainedby'        => { type = Lexeme::Type::CONSTRAINEDBY; fbreak; };
+            'der'                  => { type = Lexeme::Type::DER; fbreak; };
+            'discrete'             => { type = Lexeme::Type::DISCRETE; fbreak; };
+            'each'                 => { type = Lexeme::Type::EACH; fbreak; };
+            'else'                 => { type = Lexeme::Type::ELSE; fbreak; };
+            'elseif'               => { type = Lexeme::Type::ELSEIF; fbreak; };
+            'elsewhen'             => { type = Lexeme::Type::ELSEWHEN; fbreak; };
+            'encapsulated'         => { type = Lexeme::Type::ENCAPSULATED; fbreak; };
+            'end'                  => { type = Lexeme::Type::END; fbreak; };
+            'enumeration'          => { type = Lexeme::Type::ENUMERATION; fbreak; };
+            'equation'             => { type = Lexeme::Type::EQUATION; fbreak; };
+            'expandable'           => { type = Lexeme::Type::EXPANDABLE; fbreak; };
+            'extends'              => { type = Lexeme::Type::EXTENDS; fbreak; };
+            'external'             => { type = Lexeme::Type::EXTERNAL; fbreak; };
+            'false'                => { type = Lexeme::Type::FALSE; fbreak; };
+            'final'                => { type = Lexeme::Type::FINAL; fbreak; };
+            'flow'                 => { type = Lexeme::Type::FLOW; fbreak; };
+            'for'                  => { type = Lexeme::Type::FOR; fbreak; };
+            'function'             => { type = Lexeme::Type::FUNCTION; fbreak; };
+            'if'                   => { type = Lexeme::Type::IF; fbreak; };
+            'import'               => { type = Lexeme::Type::IMPORT; fbreak; };
+            'impure'               => { type = Lexeme::Type::IMPURE; fbreak; };
+            'in'                   => { type = Lexeme::Type::IN; fbreak; };
+            'initial'              => { type = Lexeme::Type::INITIAL; fbreak; };
+            'inner'                => { type = Lexeme::Type::INNER; fbreak; };
+            'input'                => { type = Lexeme::Type::INPUT; fbreak; };
+            'loop'                 => { type = Lexeme::Type::LOOP; fbreak; };
+            'model'                => { type = Lexeme::Type::MODEL; fbreak; };
+            'not'                  => { type = Lexeme::Type::NOT; fbreak; };
+            'operator'             => { type = Lexeme::Type::OPERATOR; fbreak; };
+            'or'                   => { type = Lexeme::Type::OR; fbreak; };
+            'outer'                => { type = Lexeme::Type::OUTER; fbreak; };
+            'output'               => { type = Lexeme::Type::OUTPUT; fbreak; };
+            'package'              => { type = Lexeme::Type::PACKAGE; fbreak; };
+            'parameter'            => { type = Lexeme::Type::PARAMETER; fbreak; };
+            'partial'              => { type = Lexeme::Type::PARTIAL; fbreak; };
+            'protected'            => { type = Lexeme::Type::PROTECTED; fbreak; };
+            'public'               => { type = Lexeme::Type::PUBLIC; fbreak; };
+            'pure'                 => { type = Lexeme::Type::PURE; fbreak; };
+            'record'               => { type = Lexeme::Type::RECORD; fbreak; };
+            'redeclare'            => { type = Lexeme::Type::REDECLARE; fbreak; };
+            'replaceable'          => { type = Lexeme::Type::REPLACEABLE; fbreak; };
+            'return'               => { type = Lexeme::Type::RETURN; fbreak; };
+            'stream'               => { type = Lexeme::Type::STREAM; fbreak; };
+            'then'                 => { type = Lexeme::Type::THEN; fbreak; };
+            'true'                 => { type = Lexeme::Type::TRUE; fbreak; };
+            'type'                 => { type = Lexeme::Type::TYPE; fbreak; };
+            'when'                 => { type = Lexeme::Type::WHEN; fbreak; };
+            'while'                => { type = Lexeme::Type::WHILE; fbreak; };
+            'within'               => { type = Lexeme::Type::WITHIN; fbreak; };
+            '{'                    => { type = Lexeme::Type::LBRACE; fbreak; };
+            '}'                    => { type = Lexeme::Type::RBRACE; fbreak; };
+            '~'                    => { type = Lexeme::Type::INV; fbreak; };
+            spaces                 => { type = Lexeme::Type::SPACES; fbreak; };
+            newline                => { type = Lexeme::Type::NEWLINE; fbreak; };
+            number                 => { type = Lexeme::Type::NUMBER; fbreak; };
+            ident                  => { type = Lexeme::Type::IDENT; fbreak; };
+            float                  => { type = Lexeme::Type::FLOAT; fbreak; };
+            string                 => { type = Lexeme::Type::STRING; fbreak; };
+            comment                => { type = Lexeme::Type::COMMENT; fbreak; };
             any             => { fbreak; };
         *|;
     }%%
@@ -175,7 +165,7 @@ Lexeme *Lexer::consume(void)
     if (m_source == m_source_end)
     {
         m_ts = m_te = m_source;
-        type = Lexeme::Type::Eof;
+        type = Lexeme::Type::EOI;
     }
     else
     {
@@ -194,7 +184,7 @@ Lexeme *Lexer::consume(void)
     unsigned int size = m_te - m_ts;
     Lexeme::pos_t position = m_position;
 
-    if (type == Lexeme::Type::Newline)
+    if (type == Lexeme::Type::NEWLINE)
     {
         m_position.first += 1;
         m_position.second = size;

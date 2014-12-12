@@ -19,10 +19,10 @@ int main(int argc, char **argv)
     while(parsing)
     {
         lexeme.reset(lexr.consume());
-        if (lexeme->type() != Lexeme::Type::Spaces && lexeme->type() != Lexeme::Type::Newline)
+        if (lexeme->type() != Lexeme::Type::SPACES && lexeme->type() != Lexeme::Type::NEWLINE)
         {
             //EcmaParse(m_yyp, static_cast<int>(lexeme->type()), lexeme.get(), this);
-            if (lexeme->type() == Lexeme::Type::Eof)
+            if (lexeme->type() == Lexeme::Type::EOI)
             {
                 parsing = false;
             }
