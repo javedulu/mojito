@@ -12,5 +12,5 @@ set(uModc_SOURCES
 )
 
 add_executable(uModc ${uModc_SOURCES})
-target_link_libraries(uModc uModParser)
+target_link_libraries(uModc uModParser uModLexer)
 #target_link_libraries(uModc uModParser uModCompiler ${LLVM_LIBRARIES_ALL})

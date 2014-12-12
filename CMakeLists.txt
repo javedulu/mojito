@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 2.8)
 
-project (uMod)
+project (uModelica)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+set(CMAKE_VERBOSE_MAKEFILE TRUE)
 
 set(WARN_BUILD TRUE)
 

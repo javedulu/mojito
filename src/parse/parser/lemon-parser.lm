@@ -10,11 +10,8 @@
     #include <string>
     #include "lexeme.h"
     #include "parser.h"
-
     using namespace umod;
-
 }
-
 %syntax_error {
     int n = sizeof(yyTokenName)/ sizeof(*yyTokenName);
     for (int i = 0; i< n; i++)
@@ -27,8 +24,6 @@
     }
     parser->error(true);
 }
-
-#%left If Var Else Null True False Return Function Undefined.
 
 %left Plus Minus Mul Div Mod.
 
@@ -46,4 +41,17 @@
 
 %left Identifier Number String.
 
+program ::= expr(A).   { std::cout << "Result=" << A << std::endl; }
 
+expr(A) ::= expr(B) Minus expr(C).  { A = B - C; }
+expr(A) ::= expr(B) Plus  expr(C).   { A = B + C; }
+expr(A) ::= expr(B) Mul   expr(C).  { A = B * C; }
+expr(A) ::= expr(B) Div   expr(C).  {
+    if(C != 0){
+        A = B / C;
+    }
+    else{
+        std::cout << "divide by zero" << std::endl;
+    }
+}  /* end of DIVIDE */
+expr(A) ::= Number(B). { A = B; }
