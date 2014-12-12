@@ -8,7 +8,7 @@ cmake_minimum_required(VERSION 2.8)
 #include_directories(${LLVM_INCLUDE_DIR})
 
 set(uModc_SOURCES
-    main.cpp
+    main.cc
 )
 
 add_executable(uModc ${uModc_SOURCES})

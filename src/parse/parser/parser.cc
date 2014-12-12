@@ -7,17 +7,17 @@
 
 using namespace umod::parser;
 
-Parser::Parser(lex::Lexer &lexer):
+Parser::Parser(lex::Lexer &lexer)
     : m_lexer(lexer)
     , m_error(false)
-    , m_program(nullptr)
+    //, m_program(nullptr)
 {
-    m_yyp = umodParserAlloc(&malloc);
+    m_yyp = umodParseAlloc(&malloc);
 }
 
 Parser::~Parser()
 {
-    umodParseFree(m_yyp, &free)
+    umodParseFree(m_yyp, &free);
 }
 
 void Parser::exec()
@@ -27,9 +27,9 @@ void Parser::exec()
 
     while (parsing && !error())
     {
-        lexeme.reset(m_lexer.consume);
-        if (lexeme->type() != lex::Lexeme::Type::Spaces && 
-                lex::Lexeme::Type::Newline)
+        lexeme.reset(m_lexer.consume());
+        if ((lexeme->type() != lex::Lexeme::Type::Spaces) &&
+            (lexeme->type()!=lex::Lexeme::Type::Newline))
         {
             umodParse(m_yyp, static_cast<int>(lexeme->type()), lexeme.get(), this);
             if (lexeme->type() == lex::Lexeme::Type::End)

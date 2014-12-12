@@ -1,11 +1,11 @@
 #ifndef UMOD_PARSER_EXCEPTION_H_
 #define UMOD_PARSER_EXCEPTION_H_
 
-#include <execption>
+#include <exception>
 #include <vector>
 #include <string>
 
-#include "umod/lex/lexeme.h"
+#include "lexeme.h"
 
 namespace umod
 {

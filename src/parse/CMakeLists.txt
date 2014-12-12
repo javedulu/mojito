@@ -19,7 +19,7 @@ add_custom_command(OUTPUT
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/lex)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/parser)
 
-set(uModParser_SOURCES
+set(uModLexer_SOURCES
     lexer.cc
     lex/lexeme.h
     lex/lexer.h
@@ -29,4 +29,12 @@ set(uModParser_SOURCES
 	lex/lexer.rl
 	)
 
-add_library(uModParser STATIC ${uModParser_SOURCES})
+set(uModParser_SOURCES
+     parser/exception.cc
+     parser/exception.h
+     parser/parser.h
+     parser/parser.cc
+     parser/lemon-parser.lm
+	)
+
+add_library(uModParser STATIC ${uModLexer_SOURCES} ${uModParser_SOURCES})

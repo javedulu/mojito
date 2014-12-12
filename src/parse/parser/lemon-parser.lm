@@ -28,7 +28,7 @@
     parser->error(true);
 }
 
-%left If Var Else Null True False Return Function Undefined.
+#%left If Var Else Null True False Return Function Undefined.
 
 %left Plus Minus Mul Div Mod.
 
@@ -45,3 +45,5 @@
 %left Semicolon Colon Comma.
 
 %left Identifier Number String.
+
+
