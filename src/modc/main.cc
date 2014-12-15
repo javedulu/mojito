@@ -3,6 +3,7 @@
 #include <fstream>
 #include <stdexcept>
 #include "lexer.h"
+#include "parser.h"
 
 using namespace umod::lex;
 int main(int argc, char **argv)
@@ -13,7 +14,7 @@ int main(int argc, char **argv)
     std::ifstream ifs(filename, std::ifstream::in);
     std::string istr((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>()); //
     
-    Lexer lexr(istr);
+    /*Lexer lexr(istr);
     std::unique_ptr<Lexeme> lexeme;
     bool parsing = true;
     while(parsing)
@@ -36,7 +37,10 @@ int main(int argc, char **argv)
             }
         }
     }
-
+    */
+    Lexer lexr(istr);
+    umod::parser::Parser _parser(lexr);
+    _parser.exec();
     return 0;
 }
 

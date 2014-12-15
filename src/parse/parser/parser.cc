@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <memory>
+#include <iostream>
 
 #include "parser.h"
 #include "exception.h"
@@ -28,9 +29,15 @@ void Parser::exec()
     while (parsing && !error())
     {
         lexeme.reset(m_lexer.consume());
-        if ((lexeme->type() != lex::Lexeme::Type::SPACES) &&
-            (lexeme->type()!=lex::Lexeme::Type::NEWLINE))
+        if ((lexeme->type() != lex::Lexeme::Type::SPACES) && (lexeme->type()!=lex::Lexeme::Type::NEWLINE))
         {
+            
+            std::cout << lexeme->as<std::string>()
+            << " @>>"
+            << lexeme->position().first<< ":" <<  lexeme->position().second
+            << " @type:"<< (int) lexeme->type()
+            << std::endl;
+            
             umodParse(m_yyp, static_cast<int>(lexeme->type()), lexeme.get(), this);
             if (lexeme->type() == lex::Lexeme::Type::EOI)
             {
@@ -45,5 +52,7 @@ void Parser::exec()
     if (error())
     {
         throw Exception("Unexpected token", *lexeme, errors());
+        exit(-1);
     }
+    
 }

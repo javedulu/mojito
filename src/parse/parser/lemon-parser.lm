@@ -2,7 +2,6 @@
 %token_type             {lex::Lexeme *}
 %extra_argument         {parser::Parser *parser}
 %name                   umodParse
-
 %include {
     #include <cassert>
     #include <cstdio>
@@ -36,16 +35,23 @@
 
 %left LPAREN RPAREN LBRACKET RBRACKET LBRACE RBRACE.
 
-%left QUESTIONMARK DOT.
 
 %left SEMICOLON COLON COMMA.
 
 %left IDENT NUMBER FLOAT STRING COMMENT.
 
-program ::= expr(A).   {
-           std::cout << "Result.value=" << A << std::endl;
-           std::cout << "Result.n=" << A << std::endl;
-}
+%left QUESTIONMARK DOT.
 
+%left ALGORITHM  AND   ANNOTATION ASSERT BLOCK BREAK CLASS.
+%left CONNECT  CONNECTOR  CONSTANT   CONSTRAINEDBY   DER.
+%left DISCRETE  EACH  ELSE  ELSEIF ELSEWHEN   ENCAPSULATED.    
+%left END   ENUMERATION EQUATION   EXPANDABLE EXPONENT   EXTENDS.
+%left EXTERNAL  FALSE FINAL FLOW  FOR   FUNCTION   IF    IMPORT.
+%left IMPURE IN    INITIAL    INNER INPUT LOOP  MODEL NEGATE OPERATOR.
+%left OR    OUTER OUTPUT PACKAGE    PARAMETER  PARTIAL    PROTECTED.
+%left PUBLIC PURE  RECORD REDECLARE  REPLACEABLE RETURN.
+%left STREAM THEN  TRUE  TYPE  WHEN  WHILE WITHIN.
 
-expr(A) ::= IDENT(B). { A = B; }
+stored_definition ::= WITHIN name(A) SEMICOLON. { std::cout<<A<<std::endl;}
+name(A) ::= name DOT IDENT(B). { A=B;}
+name ::= IDENT(B)
