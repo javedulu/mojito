@@ -29,7 +29,6 @@ Lexer::Lexer(const char *source, unsigned int length)
 
 Lexer::Lexer(const std::string &source): Lexer(source.c_str(), source.length())
 {
-
 }
 
 Lexer::~Lexer()
@@ -51,7 +50,7 @@ Lexeme *Lexer::consume(void)
         string              = ('"'([^"]|'\\' any)*'"'|'\''([^']|'\\' any)*'\'');
 
         spaces              = (' '|'\t')+;
-        newline             = ('\n');
+        newline             = ('\r'|'\n');
 
         linecomment         =  '//'[^\n]*;
         blockcomment        = '/*' ( any* - (any* '*/' any* ) ) '*/';
@@ -156,7 +155,7 @@ Lexeme *Lexer::consume(void)
             float                  => { type = Lexeme::Type::FLOAT; fbreak; };
             string                 => { type = Lexeme::Type::STRING; fbreak; };
             comment                => { type = Lexeme::Type::COMMENT; fbreak; };
-            any             => { fbreak; };
+            any                    => { fbreak; };
         *|;
     }%%
 

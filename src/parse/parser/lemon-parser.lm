@@ -35,7 +35,6 @@
 
 %left LPAREN RPAREN LBRACKET RBRACKET LBRACE RBRACE.
 
-
 %left SEMICOLON COLON COMMA.
 
 %left IDENT NUMBER FLOAT STRING COMMENT.
@@ -52,6 +51,48 @@
 %left PUBLIC PURE  RECORD REDECLARE  REPLACEABLE RETURN.
 %left STREAM THEN  TRUE  TYPE  WHEN  WHILE WITHIN.
 
-stored_definition ::= WITHIN name(A) SEMICOLON. { std::cout<<A<<std::endl;}
-name(A) ::= name DOT IDENT(B). { A=B;}
-name ::= IDENT(B)
+program ::= stored_definition.
+
+stored_definition ::= opt_within_name.{}
+stored_definition ::= class_definition_list.{}
+
+opt_within_name ::= WITHIN opt_name SEMICOLON. {}
+opt_within_name ::= opt_within_name NEWLINE. {}
+opt_within_name ::= . {}
+
+opt_name ::= name.{}
+opt_name ::= . {}
+
+name ::= name DOT IDENT.{}
+name ::= DOT IDENT.{}
+name ::= IDENT. {}
+
+class_definition_list ::= PACKAGE IDENT .{}
+//class_definition_list ::= class_definition_aux. {}
+//class_definition_list ::= .{}
+
+//class_definition_aux ::= IDENT SEMICOLON. {}
+
+/*class_definition_list ::= class_definition_list class_definition_aux. {}
+
+class_definition_aux ::= opt_final class_definition SEMICOLON. {}
+
+class_definition ::= opt_encapsulated class_prefixes class_specifier.{}
+
+class_prefixes ::= PACKAGE. {}
+class_prefixes ::= . {}
+
+class_specifier ::= IDENT STRING END IDENT. {}
+
+opt_final ::= FINAL. {}
+opt_final ::= . {}
+
+opt_encapsulated ::= ENCAPSULATED.{}
+opt_encapsulated ::= .{}
+
+opt_expandable ::= EXPANDABLE. {}
+opt_expandable ::= . {}
+
+opt_operator ::= OPERATOR.{}
+opt_operator ::= .{}
+*/

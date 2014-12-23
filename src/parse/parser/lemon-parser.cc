@@ -4,7 +4,7 @@
 /* First off, code is included that follows the "include" declaration
 ** in the input grammar file. */
 #include <stdio.h>
-#line 5 "/Users/phryne/Desktop/uMod/src/parse/parser/lemon-parser.lm"
+#line 5 "/Users/phryne/Desktop/uModelica/src/parse/parser/lemon-parser.lm"
 
     #include <cassert>
     #include <cstdio>
@@ -14,7 +14,7 @@
     #include "lexeme.h"
     #include "parser.h"
     using namespace umod;
-#line 18 "/Users/phryne/Desktop/uMod/src/parse/parser/lemon-parser.c"
+#line 18 "/Users/phryne/Desktop/uModelica/src/parse/parser/lemon-parser.c"
 /* Next is all token values, in a form suitable for use by makeheaders.
 ** This section will be null unless lemon is run with the -m switch.
 */
@@ -65,7 +65,7 @@
 **                       defined, then do no error processing.
 */
 #define YYCODETYPE unsigned char
-#define YYNOCODE 101
+#define YYNOCODE 106
 #define YYACTIONTYPE unsigned char
 #define umodParseTOKENTYPE lex::Lexeme *
 typedef union {
@@ -79,8 +79,8 @@ typedef union {
 #define umodParseARG_PDECL ,parser::Parser *parser
 #define umodParseARG_FETCH parser::Parser *parser = yypParser->parser
 #define umodParseARG_STORE yypParser->parser = parser
-#define YYNSTATE 6
-#define YYNRULE 2
+#define YYNSTATE 16
+#define YYNRULE 12
 #define YY_NO_ACTION      (YYNSTATE+YYNRULE+2)
 #define YY_ACCEPT_ACTION  (YYNSTATE+YYNRULE+1)
 #define YY_ERROR_ACTION   (YYNSTATE+YYNRULE)
@@ -150,23 +150,28 @@ static const YYMINORTYPE yyzerominor = { 0 };
 **  yy_default[]       Default action for each state.
 */
 static const YYACTIONTYPE yy_action[] = {
- /*     0 */     3,    9,    1,    2,    6,    5,   10,   10,   10,    4,
+ /*     0 */    29,    3,    2,   11,    8,   12,    4,    5,   13,    9,
+ /*    10 */    16,    7,   14,    6,   10,   30,   15,   30,   30,   30,
+ /*    20 */     1,
 };
 static const YYCODETYPE yy_lookahead[] = {
- /*     0 */    26,   98,   96,   99,    0,   29,  100,  100,  100,   35,
+ /*     0 */    99,  100,  101,  102,   80,   29,  103,  104,   29,   97,
+ /*    10 */     0,   35,   26,   35,   29,  105,   29,  105,  105,  105,
+ /*    20 */    96,
 };
-#define YY_SHIFT_USE_DFLT (-95)
-#define YY_SHIFT_MAX 4
+#define YY_SHIFT_USE_DFLT (-89)
+#define YY_SHIFT_MAX 8
 static const signed char yy_shift_ofst[] = {
- /*     0 */   -94,  -95,  -26,    4,  -24,
+ /*     0 */   -76,  -24,  -88,   10,  -14,  -22,  -15,  -13,  -21,
 };
-#define YY_REDUCE_USE_DFLT (-98)
+#define YY_REDUCE_USE_DFLT (-100)
 #define YY_REDUCE_MAX 1
 static const signed char yy_reduce_ofst[] = {
- /*     0 */   -97,  -96,
+ /*     0 */   -99,  -97,
 };
 static const YYACTIONTYPE yy_default[] = {
- /*     0 */     8,    8,    8,    8,    8,    7,
+ /*     0 */    21,   23,   17,   28,   28,   22,   28,   28,   28,   20,
+ /*    10 */    24,   18,   26,   27,   19,   25,
 };
 #define YY_SZ_ACTTAB (int)(sizeof(yy_action)/sizeof(yy_action[0]))
 
@@ -284,7 +289,9 @@ static const char *const yyTokenName[] = {
   "PUBLIC",        "PURE",          "RECORD",        "REDECLARE",   
   "REPLACEABLE",   "RETURN",        "STREAM",        "THEN",        
   "TRUE",          "TYPE",          "WHEN",          "WHILE",       
-  "WITHIN",        "error",         "stored_definition",  "name",        
+  "WITHIN",        "NEWLINE",       "error",         "program",     
+  "stored_definition",  "opt_within_name",  "class_definition_list",  "opt_name",    
+  "name",        
 };
 #endif /* NDEBUG */
 
@@ -292,8 +299,18 @@ static const char *const yyTokenName[] = {
 /* For tracing reduce actions, the names of all rules are required.
 */
 static const char *const yyRuleName[] = {
- /*   0 */ "stored_definition ::= WITHIN name SEMICOLON",
- /*   1 */ "name ::= name DOT IDENT",
+ /*   0 */ "program ::= stored_definition",
+ /*   1 */ "stored_definition ::= opt_within_name",
+ /*   2 */ "stored_definition ::= class_definition_list",
+ /*   3 */ "opt_within_name ::= WITHIN opt_name SEMICOLON",
+ /*   4 */ "opt_within_name ::= opt_within_name NEWLINE",
+ /*   5 */ "opt_within_name ::=",
+ /*   6 */ "opt_name ::= name",
+ /*   7 */ "opt_name ::=",
+ /*   8 */ "name ::= name DOT IDENT",
+ /*   9 */ "name ::= DOT IDENT",
+ /*  10 */ "name ::= IDENT",
+ /*  11 */ "class_definition_list ::= PACKAGE IDENT",
 };
 #endif /* NDEBUG */
 
@@ -598,8 +615,18 @@ static const struct {
   YYCODETYPE lhs;         /* Symbol on the left-hand side of the rule */
   unsigned char nrhs;     /* Number of right-hand side symbols in the rule */
 } yyRuleInfo[] = {
-  { 98, 3 },
-  { 99, 3 },
+  { 99, 1 },
+  { 100, 1 },
+  { 100, 1 },
+  { 101, 3 },
+  { 101, 2 },
+  { 101, 0 },
+  { 103, 1 },
+  { 103, 0 },
+  { 104, 3 },
+  { 104, 2 },
+  { 104, 1 },
+  { 102, 2 },
 };
 
 static void yy_accept(yyParser*);  /* Forward Declaration */
@@ -654,17 +681,19 @@ static void yy_reduce(
   **  #line <lineno> <thisfile>
   **     break;
   */
-      case 0: /* stored_definition ::= WITHIN name SEMICOLON */
-#line 55 "/Users/phryne/Desktop/uMod/src/parse/parser/lemon-parser.lm"
-{ std::cout<<yymsp[-1].minor.yy0<<std::endl;}
-#line 661 "/Users/phryne/Desktop/uMod/src/parse/parser/lemon-parser.c"
-        break;
-      case 1: /* name ::= name DOT IDENT */
-#line 56 "/Users/phryne/Desktop/uMod/src/parse/parser/lemon-parser.lm"
-{ yygotominor.yy0=yymsp[0].minor.yy0;}
-#line 666 "/Users/phryne/Desktop/uMod/src/parse/parser/lemon-parser.c"
-        break;
       default:
+      /* (0) program ::= stored_definition */ yytestcase(yyruleno==0);
+      /* (1) stored_definition ::= opt_within_name */ yytestcase(yyruleno==1);
+      /* (2) stored_definition ::= class_definition_list */ yytestcase(yyruleno==2);
+      /* (3) opt_within_name ::= WITHIN opt_name SEMICOLON */ yytestcase(yyruleno==3);
+      /* (4) opt_within_name ::= opt_within_name NEWLINE */ yytestcase(yyruleno==4);
+      /* (5) opt_within_name ::= */ yytestcase(yyruleno==5);
+      /* (6) opt_name ::= name */ yytestcase(yyruleno==6);
+      /* (7) opt_name ::= */ yytestcase(yyruleno==7);
+      /* (8) name ::= name DOT IDENT */ yytestcase(yyruleno==8);
+      /* (9) name ::= DOT IDENT */ yytestcase(yyruleno==9);
+      /* (10) name ::= IDENT */ yytestcase(yyruleno==10);
+      /* (11) class_definition_list ::= PACKAGE IDENT */ yytestcase(yyruleno==11);
         break;
   };
   yygoto = yyRuleInfo[yyruleno].lhs;
@@ -724,7 +753,7 @@ static void yy_syntax_error(
 ){
   umodParseARG_FETCH;
 #define TOKEN (yyminor.yy0)
-#line 15 "/Users/phryne/Desktop/uMod/src/parse/parser/lemon-parser.lm"
+#line 15 "/Users/phryne/Desktop/uModelica/src/parse/parser/lemon-parser.lm"
 
     int n = sizeof(yyTokenName)/ sizeof(*yyTokenName);
     for (int i = 0; i< n; i++)
@@ -736,7 +765,7 @@ static void yy_syntax_error(
         }
     }
     parser->error(true);
-#line 740 "/Users/phryne/Desktop/uMod/src/parse/parser/lemon-parser.c"
+#line 769 "/Users/phryne/Desktop/uModelica/src/parse/parser/lemon-parser.c"
   umodParseARG_STORE; /* Suppress warning about unused %extra_argument variable */
 }
 

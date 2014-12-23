@@ -94,3 +94,4 @@
 #define UMOD_LEXEME_TYPE_WHEN                           94
 #define UMOD_LEXEME_TYPE_WHILE                          95
 #define UMOD_LEXEME_TYPE_WITHIN                         96
+#define UMOD_LEXEME_TYPE_NEWLINE                        97

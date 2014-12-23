@@ -1,4 +1,4 @@
-#include <cstdlib>
+            #include <cstdlib>
 #include <cstdio>
 #include <memory>
 #include <iostream>
@@ -31,13 +31,6 @@ void Parser::exec()
         lexeme.reset(m_lexer.consume());
         if ((lexeme->type() != lex::Lexeme::Type::SPACES) && (lexeme->type()!=lex::Lexeme::Type::NEWLINE))
         {
-            
-            std::cout << lexeme->as<std::string>()
-            << " @>>"
-            << lexeme->position().first<< ":" <<  lexeme->position().second
-            << " @type:"<< (int) lexeme->type()
-            << std::endl;
-            
             umodParse(m_yyp, static_cast<int>(lexeme->type()), lexeme.get(), this);
             if (lexeme->type() == lex::Lexeme::Type::EOI)
             {
@@ -51,8 +44,12 @@ void Parser::exec()
     }
     if (error())
     {
-        throw Exception("Unexpected token", *lexeme, errors());
-        exit(-1);
+        for (auto err : errors())
+        {
+            std::cout<<"error ..."<<err<<std::endl;
+        }
+        std::cout<<" "<< lex::Lexeme::typeString(lexeme->type())<<" at line " << lexeme->position().first << " , column "<< lexeme->position().second;
+        //throw Exception("Unexpected token", *lexeme, errors());
     }
     
 }
