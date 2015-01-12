@@ -23,7 +23,7 @@ namespace umod
             {
                 if ((int)m_type > 0)
                 {
-                    //std::cout<<".."<<m_text<<" "<<(int)m_type<<std::endl;
+                    std::cout<<".."<<m_text<<" "<<(int)m_type<<std::endl;
                 }
             }
             inline ~Lexeme() {}

@@ -1,0 +1,511 @@
+%token_prefix           UMOD_LEXEME_TYPE_
+%token_type             {const char*}
+%name                   umodParse
+%include {
+    #include <cassert>
+    #include <cstdio>
+    #include <vector>
+    #include <string>
+    #include <iostream>
+    using namespace std;
+}
+
+%parse_accept {
+    std::cout<<"Parsing Complete !! \n";
+}
+
+%syntax_error {
+    int n = sizeof(yyTokenName)/ sizeof(*yyTokenName);
+    for (int i = 0; i< n; i++)
+    {
+        int a = yy_find_shift_action(yypParser, static_cast<YYCODETYPE>(i));
+        if (a < YY_ERROR_ACTION)
+        {
+            //parser->errors().push_back(yyTokenName[i]);
+            std::cerr<<"errror in parsing .."<<yyTokenName[i]<<std::endl;
+        }
+    }
+    //parser->error(true);
+}
+
+%nonassoc BLOCK CONNECTOR CLASS.
+program ::= classes_list.{}
+program ::= within classes_list .{}
+
+within ::= WITHIN path SEMICOLON .{}
+
+classes_list ::= class2 SEMICOLON.{}
+classes_list ::= class2 SEMICOLON classes_list.{}
+
+class2 ::= FINAL classprefix restriction IDENT classdef. {}
+class2 ::= FINAL restriction IDENT classdef.{}
+class2 ::= class.{}
+
+class ::= restriction IDENT classdef.{}
+class ::= restriction EXTENDS IDENT elementargs classparts ENDCLASS .{}
+class ::= restriction EXTENDS IDENT elementargs STRING classparts ENDCLASS .{}
+class ::= classprefix restriction IDENT classdef.{}
+class ::= classprefix restriction EXTENDS IDENT elementargs classparts ENDCLASS.{}
+class ::= classprefix restriction EXTENDS IDENT elementargs STRING classparts ENDCLASS.{}
+
+classdef ::= STRING ENDCLASS.{}
+classdef ::= ENDCLASS.{}
+classdef ::= classparts ENDCLASS.{}
+classdef ::= LPAR namedargs RPAR classparts ENDCLASS.{}
+classdef ::= STRING classparts ENDCLASS.{}
+classdef ::= STRING classparts annotation SEMICOLON ENDCLASS.{}
+classdef ::= classdefenumeration.{}
+classdef ::= classdefderived.{}
+
+classprefix::= ENCAPSULATED partial.{}
+classprefix::= PARTIAL.{}
+
+partial ::= PARTIAL.{}
+partial ::= .{}
+
+final ::= FINAL.{}
+final ::= .{}
+
+restriction ::= CLASS .{}
+restriction ::= MODEL .{}
+restriction ::= PACKAGE.{}
+restriction ::= TYPE.{}
+restriction ::= UNIONTYPE.{}
+restriction ::= BLOCK.{}
+restriction ::= CONNECTOR.{}
+restriction ::= EXPANDABLE CONNECTOR.{}
+restriction ::= ENUMERATION.{}
+restriction ::= RECORD.{}
+restriction ::= OPERATOR RECORD.{}
+restriction ::= FUNCTION.{}
+restriction ::= OPERATOR FUNCTION.{}
+restriction ::= OPERATOR.{}
+
+classdefenumeration ::= EQUALS ENUMERATION LPAR enumeration RPAR comment.{}
+
+classdefderived ::= EQUALS typespec elementargs2 comment.{}
+classdefderived ::= EQUALS elementattr typespec elementargs2 comment.{}
+
+enumeration ::= enumlist.{}
+enumeration ::= COLON.{}
+
+enumlist ::= enumliteral .{}
+enumlist ::= enumliteral COMMA enumlist.{}
+
+enumliteral ::= IDENT comment .{}
+
+classparts ::= classpart .{}
+classparts ::= classparts classpart .{}
+
+
+classpart ::= elementitems .{}
+classpart ::= restclass .{}
+
+restclass ::= PUBLIC optelement .{}
+restclass ::= PROTECTED optelement.{}
+restclass ::= EQUATION optequationsection .{}
+restclass ::= ALGORITHM optalgorithmsection .{}
+restclass ::= initialclass .{}
+restclass ::= external .{}
+
+initialclass ::= INITIAL EQUATION equationsection .{}
+initialclass ::= INITIAL ALGORITHM algorithmsection .{}
+
+optelement ::= elementitems .{}
+optelement ::= .{}
+
+optequationsection ::= equationsection .{}
+optequationsection ::= .{}
+
+optalgorithmsection ::= algorithmsection .{}
+optalgorithmsection ::= .{}
+
+external ::= EXTERNAL SEMICOLON .{}
+external ::= EXTERNAL externaldecl SEMICOLON .{}
+external ::= EXTERNAL externaldecl SEMICOLON annotation SEMICOLON.{}
+
+externaldecl ::= STRING annotation.{}
+externaldecl ::= STRING .{}
+externaldecl ::= STRING cref EQUALS IDENT LPAR explist2 RPAR annotation.{}
+externaldecl ::= STRING cref EQUALS IDENT LPAR explist2 RPAR .{}
+externaldecl ::= STRING IDENT LPAR explist2 RPAR annotation.{}
+externaldecl ::= STRING IDENT LPAR explist2 RPAR .{}
+externaldecl ::= cref EQUALS IDENT LPAR explist2 RPAR annotation .{}
+externaldecl ::= cref EQUALS IDENT LPAR explist2 RPAR .{}
+externaldecl ::= IDENT LPAR explist2 RPAR annotation.{}
+externaldecl ::= IDENT LPAR explist2 RPAR .{}
+
+/* ALGORITHMS */
+algorithmsection ::= algorithmitem SEMICOLON algorithmsection.{}
+algorithmsection ::= algorithmitem SEMICOLON.{}
+
+algorithmitem ::= algorithm comment.{}
+
+algorithm ::= simpleexp ASSIGN exp.{}
+algorithm ::= cref functioncall.{}
+algorithm ::= RETURN .{}
+algorithm ::= BREAK .{}
+algorithm ::= if_algorithm.{}
+algorithm ::= when_algorithm.{}
+algorithm ::= FOR foriterators LOOP algorithmsection ENDFOR.{}
+algorithm ::= WHILE exp LOOP algorithmsection ENDWHILE.{}
+
+if_algorithm ::= IF exp THEN ENDIF.{}
+if_algorithm ::= IF exp THEN algorithmsection ENDIF.{}
+if_algorithm ::= IF exp THEN algorithmsection ELSE algorithmsection ENDIF.{}
+if_algorithm ::= IF exp THEN algorithmsection algelseifs ENDIF.{}
+if_algorithm ::= IF exp THEN algorithmsection algelseifs ELSE algorithmsection ENDIF.{}
+
+algelseifs ::= algelseif algelseifs .{}
+algelseifs ::= algelseif .{}
+
+algelseif ::= ELSEIF exp THEN algorithmsection.{}
+
+when_algorithm ::= WHEN exp THEN algorithmsection ENDWHEN.{}
+when_algorithm ::= WHEN exp THEN algorithmsection algelsewhens ENDWHEN.{}
+
+algelsewhens ::= algelsewhen algelsewhens .{}
+algelsewhens ::= algelsewhen .{}
+
+algelsewhen ::= ELSEWHEN exp THEN algorithmsection .{}
+
+/* EQUATIONS */
+
+equationsection ::= equationitem SEMICOLON.{}
+equationsection ::= equationitem SEMICOLON equationsection.{}
+
+equationitem ::= equation comment .{}
+
+equation ::= exp EQUALS exp.{}
+equation ::= if_equation .{}
+equation ::= when_equation .{}
+equation ::= CONNECT LPAR cref COMMA cref RPAR.{}
+equation ::= cref functioncall .{}
+
+when_equation ::= WHEN exp THEN equationsection ENDWHEN.{}
+when_equation ::= WHEN exp THEN equationsection elsewhens ENDWHEN .{}
+
+elsewhens ::= elsewhen elsewhens.{}
+elsewhens ::= elsewhen .{}
+
+elsewhen ::= ELSEWHEN exp THEN equationsection .{}
+
+foriterators ::= foriterator COMMA foriterators .{}
+foriterators ::= foriterator .{}
+
+foriterator ::= IDENT IN exp .{}
+foriterator ::= IDENT .{}
+
+if_equation ::= IF exp THEN equationsection ENDIF.{}
+if_equation ::= IF exp THEN equationsection ELSE equationsection ENDIF.{}
+if_equation ::= IF exp THEN equationsection ELSE ENDIF.{}
+if_equation ::= IF exp THEN equationsection elseifs ENDIF.{}
+if_equation ::= IF exp THEN equationsection elseifs ELSE equationsection ENDIF.{}
+if_equation ::= IF exp THEN equationsection elseifs ELSE ENDIF.{}
+
+elseifs ::= elseif elseifs.{}
+elseifs ::= elseif.{}
+
+elseif ::= ELSEIF exp THEN equationsection.{}
+
+/*Expressions and Elements */
+
+elementitems ::= elementitem elementitems.{}
+elementitems ::= elementitem .{}
+
+elementitem ::= element SEMICOLON.{}
+elementitem ::= annotation SEMICOLON.{}
+
+
+element ::= componentclause.{}
+element ::= classelement2 .{}
+element ::= importelementspec .{}
+element ::= extends .{}
+element ::= unitclause.{}
+
+unitclause ::= DEFINEUNIT IDENT.{}
+unitclause ::= DEFINEUNIT IDENT LPAR namedargs RPAR.{}
+
+classelement2 ::= classelementspec .{}
+classelement2 ::= REDECLARE classelementspec .{}
+
+componentclause ::= elementspec.{}
+componentclause ::= innerouter elementspec.{}
+componentclause ::= redeclarekeywords final innerouter elementspec.{}
+componentclause ::= redeclarekeywords final elementspec.{}
+componentclause ::= redeclarekeywords final elementspec constraining_clause.{}
+componentclause ::= FINAL elementspec .{}
+componentclause ::= FINAL innerouter elementspec .{}
+
+componentitems ::= componentitem COMMA componentitems.{}
+componentitems ::= componentitem.{}
+
+componentitem ::= component componentcondition comment.{}
+componentitem ::= component comment.{}
+
+componentcondition ::= IF exp.{}
+
+component ::= IDENT arraysubscripts modification.{}
+component ::= IDENT arraysubscripts .{}
+
+modification ::= EQUALS exp .{}
+modification ::= ASSIGN exp .{}
+modification ::= class_modification .{}
+
+class_modification ::= elementargs EQUALS exp.{}
+class_modification ::= elementargs .{}
+
+annotation ::= ANNOTATION elementargs .{}
+elementargs ::= LPAR argumentlist RPAR .{}
+
+elementargs2 ::= LPAR argumentlist RPAR.{}
+elementargs2 ::= .{}
+
+argumentlist ::= elementarg COMMA argumentlist.{}
+argumentlist ::= elementarg.{}
+
+elementarg ::= element_mod_rep .{}
+elementarg ::= element_redec.{}
+
+element_mod_rep ::= element_mod .{}
+element_mod_rep ::= element_rep.{}
+
+element_mod ::= eachprefix final cref.{}
+element_mod ::= eachprefix final cref modification STRING.{}
+element_mod ::= eachprefix final cref modification.{}
+element_mod ::= eachprefix final cref STRING .{}
+
+element_rep ::= REPLACABLE eachprefix final classelementspec .{}
+element_rep ::= REPLACABLE eachprefix final elementspec2 .{}
+element_rep ::= REPLACABLE eachprefix final classelementspec constraining_clause .{}
+element_rep ::= REPLACABLE eachprefix final elementspec2 constraining_clause .{}
+
+element_redec ::= REDECLARE eachprefix final classelementspec .{}
+element_redec ::= REDECLARE eachprefix final elementspec2.{}
+
+elementspec2 ::= elementattr typespec componentitems2 .{}
+elementspec2 ::= typespec componentitems2.{}
+
+componentitems2 ::= component comment .{}
+
+eachprefix ::= EACH .{}
+eachprefix ::= .{}
+
+redeclarekeywords ::= REPLACABLE REDECLARE.{}
+redeclarekeywords ::= REDECLARE.{}
+redeclarekeywords ::= REPLACABLE.{}
+
+innerouter ::= INNER OUTER .{}
+innerouter ::= INNER.{}
+innerouter ::= OUTER.{}
+
+importelementspec ::= import comment .{}
+
+classelementspec ::= class .{}
+classelementspec ::= REPLACABLE class.{}
+
+import ::= IMPORT path.{}
+import ::= IMPORT path STAR_EW.{}
+import ::= IMPORT IDENT EQUALS path.{}
+
+extends ::= EXTENDS path elementargs2.{}
+extends ::= EXTENDS path elementargs2 annotation.{}
+
+constraining_clause ::= extends .{}
+constraining_clause ::= CONSTRAINEDBY path elementargs2 .{}
+
+elementspec ::= elementattr typespec componentitems .{}
+elementspec ::= typespec componentitems .{}
+
+elementattr ::= FLOW .{}
+elementattr ::= FLOW direction .{}
+elementattr ::= FLOW variability direction .{}
+elementattr ::= STREAM variability direction .{}
+elementattr ::= variability direction .{}
+elementattr ::= variability .{}
+elementattr ::= direction .{}
+
+
+variability ::= PARAMETER.{}
+variability ::= CONSTANT.{}
+variability ::= DISCRETE.{}
+//variability ::= .{}
+
+direction ::= INPUT .{}
+direction ::= OUTPUT.{}
+//direction ::= .{}
+
+/* Type Specification */
+
+typespec ::= path arraysubscripts .{}
+typespec ::= path arraycomplex.{}
+
+arraycomplex ::= LESS typespecs GREATER.{}
+
+typespecs ::= typespec .{}
+typespecs ::= typespec COMMA typespecs .{}
+
+arraysubscripts ::= LBRACK arraydim RBRACK.{}
+arraysubscripts ::= .{}
+
+arraydim ::= subscript .{}
+arraydim ::= subscript COMMA arraydim .{}
+
+subscript ::= exp.{}
+subscript ::= COLON.{}
+
+/* function calls */
+functioncall ::= LPAR functionargs RPAR.{}
+
+functionargs ::= namedargs. {}
+functionargs ::= functionargs2 .{}
+functionargs ::= functionargs3 .{}
+
+functionargs2 ::= explist2 .{}
+functionargs2 ::= explist2 COMMA namedargs.{}
+
+functionargs3 ::= exp FOR foriterators.{}
+
+namedargs ::= namedarg.{}
+namedargs ::= namedarg COMMA namedargs.{}
+
+namedarg ::= IDENT EQUALS exp.{}
+
+/* expressions */
+exp ::= simpleexp.{}
+exp ::= if_exp.{}
+exp ::= matchcont.{}
+
+matchcont ::= MATCH exp cases ENDMATCH.{}
+matchcont ::= MATCH exp matchlocal cases ENDMATCH.{}
+matchcont ::= MATCHCONTINUE exp cases ENDMATCHCONTINUE.{}
+matchcont ::= MATCHCONTINUE exp matchlocal cases ENDMATCHCONTINUE.{}
+
+if_exp ::= IF exp THEN exp ELSE exp.{}
+if_exp ::= IF exp THEN exp expelseifs ELSE exp.{}
+
+
+expelseifs ::= expelseif expelseifs.{}
+expelseifs ::= expelseif.{}
+
+expelseif ::= ELSEIF exp THEN exp.{}
+
+matchlocal ::= LOCAL elementitems.{}
+
+cases ::= case cases.{}
+cases ::= case.{}
+
+case ::= CASE casearg THEN exp SEMICOLON.{}
+case ::= CASE casearg EQUATION THEN exp SEMICOLON.{}
+case ::= CASE casearg EQUATION equationsection THEN exp SEMICOLON.{}
+case ::= ELSE THEN exp SEMICOLON .{}
+case ::= ELSE EQUATION equationsection THEN exp SEMICOLON .{}
+
+casearg ::= exp.{}
+
+simpleexp ::= logicexp.{}
+simpleexp ::= rangeexp.{}
+simpleexp ::= headtail.{}
+simpleexp ::= IDENT AS simpleexp.{}
+
+
+headtail ::= logicexp COLONCOLON headtail.{}
+headtail ::= logicexp COLONCOLON logicexp.{}
+
+rangeexp ::= logicexp COLON logicexp COLON logicexp .{}
+rangeexp ::= logicexp COLON logicexp .{}
+
+logicexp ::= logicexp OR logicterm .{}
+logicexp ::= logicterm .{}
+
+logicterm ::= logfactor AND logfactor.{}
+logicterm ::= logfactor .{}
+
+logfactor ::= relterm .{}
+logfactor ::= NOT relterm .{}
+
+relterm ::= addterm reloperator addterm.{}
+relterm ::= addterm .{}
+
+addterm ::= addterm woperator term.{}
+addterm ::= unoperator term.{}
+addterm ::= term.{}
+
+
+term ::= term soperator factor .{}
+term ::= factor .{}
+
+factor ::= expelement power factor.{}
+factor ::= expelement.{}
+
+expelement ::= number .{}
+expelement ::= cref .{}
+expelement ::= FALSE .{}
+expelement ::= TRUE.{}
+expelement ::= STRING .{}
+expelement ::= tuple.{}
+expelement ::= LBRACE explist2 RBRACE .{}
+expelement ::= LBRACE functionargs RBRACE .{}
+expelement ::= LBRACK matrix RBRACK .{}
+expelement ::= cref functioncall.{}
+expelement ::= DER functioncall.{}
+expelement ::= INITIAL functioncall.{}
+expelement ::= LPAR exp RPAR .{}
+expelement ::= END.{}
+
+number ::= UNSIGNED_INTEGER.{}
+number ::= UNSIGNED_REAL.{}
+
+matrix ::= explist2 .{}
+matrix ::= explist2 SEMICOLON matrix.{}
+
+tuple ::= LPAR explist RPAR.{}
+
+explist ::= exp COMMA explist.{}
+explist ::= exp COMMA exp.{}
+explist ::= .{}
+
+explist2 ::= exp .{}
+explist2 ::= explist2 COMMA exp.{}
+explist2 ::= .{}
+
+//cref ::= DOT cref .{}
+cref ::= IDENT arraysubscripts .{}
+cref ::= IDENT arraysubscripts DOT cref .{}
+cref ::= WILD.{}
+cref ::= ALLWILD.{}
+
+unoperator ::= PLUS.{}
+unoperator ::= MINUS .{}
+unoperator ::= PLUS_EW.{}
+unoperator ::= MINUS_EW.{}
+
+
+woperator ::= PLUS.{}
+woperator ::= MINUS .{}
+woperator ::= PLUS_EW.{}
+woperator ::= MINUS_EW.{}
+
+soperator ::= STAR .{}
+soperator ::= SLASH .{}
+soperator ::= STAR_EW.{}
+soperator ::= SLASH_EW.{}
+
+power ::= POWER.{}
+power ::= POWER_EW.{}
+
+reloperator ::= LESS.{}
+reloperator ::= LESSEQ.{}
+reloperator ::= GREATER.{}
+reloperator ::= GREATEREQ.{}
+reloperator ::= EQEQ.{}
+reloperator ::= LESSGT.{}
+
+path ::= IDENT DOT path.{}
+path ::= DOT path.{}
+path ::= IDENT.{}
+
+comment ::= STRING .{}
+comment ::= STRING annotation .{}
+comment ::= annotation .{}
+comment ::= .{}

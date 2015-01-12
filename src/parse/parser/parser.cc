@@ -23,6 +23,10 @@ Parser::~Parser()
 
 void Parser::exec()
 {
+    FILE *fp;
+    fp=fopen("/Users/phryne/Desktop/out.log", "w+");
+    std::string prompt = ">>> ";
+    umodParseTrace(fp, (char *)prompt.c_str());
     std::unique_ptr<lex::Lexeme> lexeme;
     bool parsing = true;
 
@@ -46,7 +50,7 @@ void Parser::exec()
     {
         for (auto err : errors())
         {
-            std::cout<<"error ..."<<err<<std::endl;
+            std::cerr<<"error ..."<<err<<std::endl;
         }
         std::cout<<" "<< lex::Lexeme::typeString(lexeme->type())<<" at line " << lexeme->position().first << " , column "<< lexeme->position().second;
         //throw Exception("Unexpected token", *lexeme, errors());

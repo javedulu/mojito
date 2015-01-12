@@ -45,6 +45,7 @@ namespace umod
 void *umodParseAlloc(void *(*mallocProc)(size_t));
 void umodParseFree(void *p, void (*freeProc)(void*));
 void umodParse(void *yyp, int yymajor, umod::lex::Lexeme *yyminor,umod::parser::Parser *parser);
+void umodParseTrace(FILE *TraceFILE, char *zTracePrompt);
 
 
 #endif /* UMOD_PARSER_PARSER_H_ */
