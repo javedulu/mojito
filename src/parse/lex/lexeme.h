@@ -3,7 +3,6 @@
 
 #include <string>
 #include <sstream>
-#include <iostream>
 #include <utility>
 #include "lemon-parser.h"
 
@@ -19,13 +18,7 @@ namespace umod
             enum class AutoType: int;
             enum class Type: int;
 
-            inline Lexeme(Type type, std::string const &text, pos_t const &position): m_type(type), m_text(text), m_position(position)
-            {
-                if ((int)m_type > 0)
-                {
-                    std::cout<<".."<<m_text<<" "<<(int)m_type<<std::endl;
-                }
-            }
+            inline Lexeme(Type type, std::string const &text, pos_t const &position): m_type(type), m_text(text), m_position(position) {}
             inline ~Lexeme() {}
 
             inline const Type type(void) const

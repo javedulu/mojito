@@ -29,6 +29,7 @@ Lexer::Lexer(const char *source, unsigned int length)
 
 Lexer::Lexer(const std::string &source): Lexer(source.c_str(), source.length())
 {
+
 }
 
 Lexer::~Lexer()
@@ -38,7 +39,6 @@ Lexer::~Lexer()
 
 Lexeme *Lexer::consume(void)
 {
-    Lexeme::Type type = Lexeme::Type::EOI;
     %%{
         ident               = [a-zA-Z$_][a-zA-Z0-9$_]*;
         
@@ -51,20 +51,20 @@ Lexeme *Lexer::consume(void)
         string              = ('"'([^"]|'\\' any)*'"'|'\''([^']|'\\' any)*'\'');
 
         spaces              = (' '|'\t')+;
-        newline             = ('\r'|'\n');
+        newline             = ('\n');
 
         linecomment         =  '//'[^\n]*;
         blockcomment        = '/*' ( any* - (any* '*/' any* ) ) '*/';
         comment             = linecomment | blockcomment;
-        
-        initialeq           = ['initial']* 'equation';
-        initialalg          = ['initial']* 'algorithm';
+        initialalg          = 'initial algorthim';
+        initialeq          = 'initial equation';
 
         main := |*
             '=='                   => { type = Lexeme::Type::COMPEQ; fbreak; };
             '='                    => { type = Lexeme::Type::EQUAL; fbreak; };
             ';'                    => { type = Lexeme::Type::SEMICOLON; fbreak; };
             ','                    => { type = Lexeme::Type::COMA; fbreak; };
+            '.'                    => { type = Lexeme::Type::DOT; fbreak; };
             '.^'                   => { type = Lexeme::Type::DOTCARET; fbreak; };
             '^'                    => { type = Lexeme::Type::CARET; fbreak; };
             '('                    => { type = Lexeme::Type::OPAREN; fbreak; };
@@ -73,6 +73,7 @@ Lexeme *Lexer::consume(void)
             '}'                    => { type = Lexeme::Type::CBRACE; fbreak; };
             '['                    => { type = Lexeme::Type::OBRACKET; fbreak; };
             ']'                    => { type = Lexeme::Type::CBRACKET; fbreak; };
+            
             '.+'                   => { type = Lexeme::Type::DOTPLUS; fbreak; };
             '.-'                   => { type = Lexeme::Type::DOTMINUS; fbreak; };
             '.*'                   => { type = Lexeme::Type::DOTSTAR; fbreak; };
@@ -89,9 +90,12 @@ Lexeme *Lexer::consume(void)
             '>'                    => { type = Lexeme::Type::GREATER; fbreak; };
             ':='                   => { type = Lexeme::Type::ASSING; fbreak; };
             ':'                    => { type = Lexeme::Type::COLON; fbreak; };
-            
+
             initialalg             => { type = Lexeme::Type::INITIALALG; fbreak; };
             initialeq              => { type = Lexeme::Type::INITIALEQ; fbreak; };
+
+
+
             'algorithm'            => { type = Lexeme::Type::ALGORITHM; fbreak; };
             'and'                  => { type = Lexeme::Type::AND; fbreak; };
             'annotation'           => { type = Lexeme::Type::ANNOTATION; fbreak; };
@@ -110,7 +114,7 @@ Lexeme *Lexer::consume(void)
             'elsewhen'             => { type = Lexeme::Type::ELSEWHEN; fbreak; };
             'encapsulated'         => { type = Lexeme::Type::ENCAPSULATED; fbreak; };
             'end'                  => { type = Lexeme::Type::END; fbreak; };
-            'end'                  => { type = Lexeme::Type::ENDSUB; fbreak; };
+            'endsub'                  => { type = Lexeme::Type::ENDSUB; fbreak; };
             'enumeration'          => { type = Lexeme::Type::ENUMERATION; fbreak; };
             'equation'             => { type = Lexeme::Type::EQUATION; fbreak; };
             'expandable'           => { type = Lexeme::Type::EXPANDABLE; fbreak; };
@@ -151,18 +155,17 @@ Lexeme *Lexer::consume(void)
             'when'                 => { type = Lexeme::Type::WHEN; fbreak; };
             'while'                => { type = Lexeme::Type::WHILE; fbreak; };
             'within'               => { type = Lexeme::Type::WITHIN; fbreak; };
-            
             spaces                 => { type = Lexeme::Type::SPACES; fbreak; };
             newline                => { type = Lexeme::Type::NEWLINE; fbreak; };
             int                    => { type = Lexeme::Type::INT; fbreak; };
+            ident                  => { type = Lexeme::Type::IDENT; fbreak; };
             float                  => { type = Lexeme::Type::FLOAT; fbreak; };
             string                 => { type = Lexeme::Type::STRING; fbreak; };
-            ident                  => { type = Lexeme::Type::IDENT; fbreak; };
-            comment                => { type = Lexeme::Type::COMMENT; fbreak; };
-            any                    => { type = Lexeme::Type::ANYLEFTOUT; fbreak; };
+            any             => { fbreak; };
         *|;
     }%%
 
+    Lexeme::Type type;
 
     if (m_source == m_source_end)
     {

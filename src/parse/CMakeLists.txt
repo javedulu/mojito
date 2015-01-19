@@ -28,7 +28,7 @@ add_executable(lemon ${lemon_SOURCES})
 add_custom_command(OUTPUT
     lemon-parser.cc
     lemon-parser.h
-    COMMAND lemon -sb "${CMAKE_CURRENT_SOURCE_DIR}/parser/lemon-parser.lm"
+    COMMAND /usr/local/bin/lemon -sb "${CMAKE_CURRENT_SOURCE_DIR}/parser/lemon-parser.lm"
     #COMMAND rm    "${CMAKE_CURRENT_SOURCE_DIR}/parser/lemon-parser.out"
     COMMAND mv    "${CMAKE_CURRENT_SOURCE_DIR}/parser/lemon-parser.c" "${CMAKE_CURRENT_SOURCE_DIR}/parser/lemon-parser.cc"
     COMMAND cp    "${CMAKE_CURRENT_SOURCE_DIR}/parser/lemon-parser.h" "${CMAKE_CURRENT_BINARY_DIR}/lemon-parser.h"
@@ -46,7 +46,7 @@ set(uModLexer_SOURCES
     lex/lexeme.h
     lex/lexer.h
     lex/types.h
-    lemon-parser.h
+    parser/lemon-parser.h
     lex/lexeme.cc
 	lex/lexer.rl
 	)

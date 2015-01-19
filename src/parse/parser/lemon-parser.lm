@@ -30,13 +30,12 @@
     parser->error(true);
 }
 
-
 %left ASSING.
 %left EQUAL.
 %left THEN.
 %left ELSE.
 
-%left SEMICOLON COLON COMMA.
+%left COLON.
 
 %left NOT.
 %left AND OR.
@@ -55,15 +54,45 @@
 %left FC.
 %left PARENS.
 
+%left SEMICOLON COMMA.
+
 %left OBRACE CBRACE OBRACKET CBRACKET OPAREN CPAREN.
 
 %left IDENT STRING.
 
-program ::= stored_definition.
 
-stored_definition ::= 
-                    opt_within_name 
-                    class_definition_list. {}
+/*
+%left PLUS MINUS MUL DIV.
+
+%left ASSIGN PLUSASSIGN MINUSASSIGN MULASSIGN DIVASSIGN.
+
+%left GREATER GREATEROREQUAL LESSER LESSEROREQUAL EQUAL NOTEQUAL.
+
+%left NOT INV INCREMENTATION DECREMENTATION.
+
+%left LPAREN RPAREN LBRACKET RBRACKET LBRACE RBRACE.
+
+
+%left SEMICOLON COLON COMMA.
+
+%left IDENT NUMBER FLOAT STRING COMMENT.
+
+%left QUESTIONMARK DOT.
+
+%left ALGORITHM  AND   ANNOTATION ASSERT BLOCK BREAK CLASS.
+%left CONNECT  CONNECTOR  CONSTANT   CONSTRAINEDBY   DER.
+%left DISCRETE  EACH  ELSE  ELSEIF ELSEWHEN   ENCAPSULATED.
+%left END   ENUMERATION EQUATION   EXPANDABLE EXPONENT   EXTENDS.
+%left EXTERNAL  FALSE FINAL FLOW  FOR   FUNCTION   IF    IMPORT.
+%left IMPURE IN    INITIAL    INNER INPUT LOOP  MODEL NEGATE OPERATOR.
+%left OR    OUTER OUTPUT PACKAGE    PARAMETER  PARTIAL    PROTECTED.
+%left PUBLIC PURE  RECORD REDECLARE  REPLACEABLE RETURN.
+%left STREAM THEN  TRUE  TYPE  WHEN  WHILE WITHIN.
+ */
+
+program ::= stored_definition.{}
+
+stored_definition ::= opt_within_name class_definition_list .{}
 
 opt_within_name ::= WITHIN opt_name SEMICOLON. {}
 opt_within_name ::= . {}
@@ -186,8 +215,8 @@ opt_inner ::= INNER. {}
 opt_outer ::= .{}
 opt_outer ::= OUTER.{}
 
-opt_constraining_clause::=.{}
-opt_constraining_clause::= constraining_clause comment. {}
+opt_constraining_clause ::=.{}
+opt_constraining_clause ::= constraining_clause comment. {}
 
 constraining_clause ::= CONSTRAINEDBY name opt_class_modification.{}
 
@@ -225,7 +254,7 @@ opt_array_subscripts ::= .{}
 component_list ::= component_declaration. {}
 component_list ::= component_list COMA component_declaration. {}
 
-component_declaration::= declaration opt_condition_attribute comment. {}
+component_declaration ::= declaration opt_condition_attribute comment. {}
 
 declaration ::= IDENT opt_array_subscripts opt_modification.{}
 
@@ -271,10 +300,10 @@ element_replacable ::= REPLACEABLE component_clause1 opt_constraining_clause. {}
 opt_equal_exp ::= .{}
 opt_equal_exp ::= EQUAL expression.{}
 
-element_redeclaration::= REDECLARE opt_each opt_final element_redeclaration_1 .{}
+element_redeclaration ::= REDECLARE opt_each opt_final element_redeclaration_1 .{}
 
-element_redeclaration_1::= element_redeclaration_2. {}
-element_redeclaration_1::= element_replacable. {}
+element_redeclaration_1 ::= element_redeclaration_2. {}
+element_redeclaration_1 ::= element_replacable. {}
 
 element_redeclaration_2 ::= short_class_definition.{}
 element_redeclaration_2 ::= component_clause1.{}
@@ -343,8 +372,8 @@ for_equation ::= FOR for_indices LOOP equation_list END FOR .{}
 
 when_equation ::= WHEN expression THEN equation_list opt_else_when END WHEN .{}
 
-opt_else_when::= opt_else_when ELSEWHEN expression THEN equation_list.{}
-opt_else_when::= .{}
+opt_else_when ::= opt_else_when ELSEWHEN expression THEN equation_list.{}
+opt_else_when ::= .{}
 
 if_equation ::= IF expression THEN equation_list opt_elseif_eq opt_else_eq END IF.{}
 
@@ -420,9 +449,9 @@ opt_function_arguments ::= .{}
 
 /****** Expressions *****/
 expression ::= primary .{}
-expression ::= OPAREN output_expression_list CPAREN PREC PARENS .{}
-expression ::= MINUS expression PREC UMINUS .{}
-expression ::= PLUS expression PREC UPLUS .{}
+expression ::= OPAREN output_expression_list CPAREN PARENS .{}
+expression ::= MINUS expression UMINUS .{}
+expression ::= PLUS expression UPLUS .{}
 expression ::= NOT expression. {}
 expression ::= expression COLON expression.{}
 expression ::= expression LOWER expression.{}
@@ -478,9 +507,9 @@ component_reference_list ::= component_reference_list DOT IDENT opt_array_subscr
 component_reference_list ::= .{}
 
 simple_expression ::= primary .{}
-simple_expression ::= OPAREN output_expression_list CPAREN PREC PARENS .{}
-simple_expression ::= MINUS expression PREC UMINUS .{}
-simple_expression ::= PLUS expression PREC UPLUS.{}
+simple_expression ::= OPAREN output_expression_list CPAREN PARENS .{}
+simple_expression ::= MINUS expression UMINUS .{}
+simple_expression ::= PLUS expression UPLUS.{}
 simple_expression ::= NOT expression .{}
 simple_expression ::= simple_expression COLON expression .{}
 simple_expression ::= simple_expression LOWER expression .{}
@@ -509,8 +538,9 @@ more_comp_call ::= more_comp_call DOT IDENT.{}
 more_comp_call ::= .{}
 
 opt_comp_call ::= DOT IDENT more_comp_call. {}
-//opt_comp_call ::= IDENT more_comp_call. {}
 opt_comp_call ::= DOT IDENT more_comp_call array_subscripts more_cr.{}
 opt_comp_call ::= IDENT more_comp_call array_subscripts more_cr.{}
 opt_comp_call ::= DOT IDENT more_comp_call function_call_args .{}
-opt_comp_call ::= IDENT more_comp_call function_call_args PREC FC.{}
+opt_comp_call ::= IDENT more_comp_call function_call_args FC.{}
+//opt_comp_call ::= IDENT more_comp_call. {}
+
