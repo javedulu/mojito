@@ -29,10 +29,10 @@
 #define UMOD_LEXEME_TYPE_SEMICOLON                      29
 #define UMOD_LEXEME_TYPE_COMMA                          30
 #define UMOD_LEXEME_TYPE_OBRACE                         31
-#define UMOD_LEXEME_TYPE_CBRACE                         32
-#define UMOD_LEXEME_TYPE_OBRACKET                       33
-#define UMOD_LEXEME_TYPE_CBRACKET                       34
-#define UMOD_LEXEME_TYPE_OPAREN                         35
+#define UMOD_LEXEME_TYPE_OBRACKET                       32
+#define UMOD_LEXEME_TYPE_OPAREN                         33
+#define UMOD_LEXEME_TYPE_CBRACE                         34
+#define UMOD_LEXEME_TYPE_CBRACKET                       35
 #define UMOD_LEXEME_TYPE_CPAREN                         36
 #define UMOD_LEXEME_TYPE_IDENT                          37
 #define UMOD_LEXEME_TYPE_STRING                         38

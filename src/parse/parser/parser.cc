@@ -23,6 +23,11 @@ Parser::~Parser()
 
 void Parser::exec()
 {
+    std::string prompt= ">>>";
+    FILE *fp;
+    
+    fp = fopen("/Users/phryne/Desktop/out.txt","w");
+    umodParseTrace(fp,(char *)prompt.c_str());
     std::unique_ptr<lex::Lexeme> lexeme;
     bool parsing = true;
 
@@ -32,11 +37,11 @@ void Parser::exec()
         if ((lexeme->type() != lex::Lexeme::Type::SPACES) && (lexeme->type()!=lex::Lexeme::Type::NEWLINE))
         {
             
-            std::cout << lexeme->as<std::string>()
-            << " @>>"
-            << lexeme->position().first<< ":" <<  lexeme->position().second
-            << " @type:"<< (int) lexeme->type()
-            << std::endl;
+            //std::cout << lexeme->as<std::string>()
+            //<< " @>>"
+            //<< lexeme->position().first<< ":" <<  lexeme->position().second
+            //<< " @type:"<< (int) lexeme->type()
+            //<< std::endl;
             
             umodParse(m_yyp, static_cast<int>(lexeme->type()), lexeme.get(), this);
             if (lexeme->type() == lex::Lexeme::Type::EOI)
@@ -51,10 +56,8 @@ void Parser::exec()
     }
     if (error())
     {
-        std::cout<<"errors .."<<lexeme->as<std::string>()<<std::endl;
-        for (auto error : errors())
-            std::cout<<"\t\t"<<error<<std::endl;
         //throw Exception("Unexpected token", *lexeme, errors());
+        Exception("Unexpected token", *lexeme, errors());
         exit(-1);
     }
     

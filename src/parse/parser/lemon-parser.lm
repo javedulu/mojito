@@ -30,6 +30,12 @@
     parser->error(true);
 }
 
+%stack_overflow {
+    std::cout<<"OVERFLOW :)  ... Giving up.  Parser stack overflow\n";
+}
+
+%stack_size 1000
+
 %left ASSING.
 %left EQUAL.
 %left THEN.
@@ -56,7 +62,7 @@
 
 %left SEMICOLON COMMA.
 
-%left OBRACE CBRACE OBRACKET CBRACKET OPAREN CPAREN.
+%left OBRACE OBRACKET OPAREN CBRACE CBRACKET CPAREN.
 
 %left IDENT STRING.
 
@@ -105,8 +111,8 @@ name ::= DOT IDENT.{}
 name ::= IDENT. {}
 
 
-class_definition_list ::= .{}
 class_definition_list ::= class_definition_list class_definition_aux. {}
+class_definition_list ::= .{}
 
 class_definition_aux ::= opt_final class_definition SEMICOLON.{}
 
@@ -139,11 +145,11 @@ class_prefixes ::= OPERATOR. {  }
 
 
 opt_operator ::= OPERATOR. {}
-opt_operator ::= . {}
+opt_operator ::= .{}
 
 
 opt_partial ::= PARTIAL. {}
-opt_partial ::= . {}
+opt_partial ::= .{}
 
 
 class_specifier ::= IDENT string_comment composition END IDENT. { }
@@ -176,9 +182,9 @@ composition_aux_1 ::= element SEMICOLON element_list composition_element composi
 composition_aux_1 ::= composition_element composition_list.{}
 composition_aux_1 ::= .{}
 
-string_comment ::= .{}
-string_comment ::= STRING. {}
 string_comment ::= STRING PLUS string_comment_no_empty. {}
+string_comment ::= STRING. {}
+string_comment ::= .{}
 
 string_comment_no_empty ::= STRING PLUS string_comment_no_empty.{}
 string_comment_no_empty ::= STRING.{}
@@ -192,9 +198,9 @@ import_clause ::= IMPORT opt_import comment.{}
 opt_import ::= IDENT EQUAL name.{}
 opt_import ::= name opt_import_spec .{}
 
-opt_import_spec ::=. {}
-opt_import_spec ::=  DOTSTAR. {}
 opt_import_spec ::=  DOT OBRACE import_list CBRACE.{}
+opt_import_spec ::=  DOTSTAR. {}
+opt_import_spec ::= .{}
 
 import_list ::= IDENT.{}
 import_list ::= IDENT COMA import_list.{}
@@ -251,8 +257,8 @@ type_specifier ::= name. {}
 opt_array_subscripts ::= array_subscripts .{}
 opt_array_subscripts ::= .{}
 
-component_list ::= component_declaration. {}
 component_list ::= component_list COMA component_declaration. {}
+component_list ::= component_declaration. {}
 
 component_declaration ::= declaration opt_condition_attribute comment. {}
 
@@ -330,8 +336,8 @@ opt_class_modification ::= .{}
 
 base_prefix ::= type_prefix.{}
 
-subscript_list ::= subscript .{}
 subscript_list ::= subscript_list COMA subscript.{}
+subscript_list ::= subscript .{}
 
 subscript ::= COLON.{}
 subscript ::= expression.{}
@@ -365,8 +371,8 @@ opt_more_indexes ::= .{}
 
 for_index ::= IDENT opt_in .{}
 
+//opt_in ::= .{}
 opt_in ::= IN expression.{}
-opt_in ::= .{}
 
 for_equation ::= FOR for_indices LOOP equation_list END FOR .{}
 
@@ -541,6 +547,5 @@ opt_comp_call ::= DOT IDENT more_comp_call. {}
 opt_comp_call ::= DOT IDENT more_comp_call array_subscripts more_cr.{}
 opt_comp_call ::= IDENT more_comp_call array_subscripts more_cr.{}
 opt_comp_call ::= DOT IDENT more_comp_call function_call_args .{}
-opt_comp_call ::= IDENT more_comp_call function_call_args FC.{}
-//opt_comp_call ::= IDENT more_comp_call. {}
-
+opt_comp_call ::= IDENT more_comp_call function_call_args.{}
+opt_comp_call ::= IDENT more_comp_call. {}

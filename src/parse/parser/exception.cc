@@ -39,5 +39,6 @@ Exception::Exception(const std::string &message, const lex::Lexeme &lexeme, cons
         }
         strstream << ")";
     }
+    std::cout<<strstream.str();
     m_what = strstream.str();
 }

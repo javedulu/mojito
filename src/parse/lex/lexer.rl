@@ -51,12 +51,12 @@ Lexeme *Lexer::consume(void)
         string              = ('"'([^"]|'\\' any)*'"'|'\''([^']|'\\' any)*'\'');
 
         spaces              = (' '|'\t')+;
-        newline             = ('\n');
+        newline             = ('\r'|'\n');
 
         linecomment         =  '//'[^\n]*;
         blockcomment        = '/*' ( any* - (any* '*/' any* ) ) '*/';
         comment             = linecomment | blockcomment;
-        initialalg          = 'initial algorthim';
+        initialalg          = 'initial algorithm';
         initialeq          = 'initial equation';
 
         main := |*
