@@ -20,8 +20,6 @@ namespace umod
 
             inline Lexeme(Type type, std::string const &text, pos_t const &position): m_type(type), m_text(text), m_position(position)
             {
-                //if ((int) type > 0)
-                    //std::cout<<" >>> "<< text <<": ("<< position.first<<","<<position.second<<") :"<<(int) type <<std::endl;
             }
             inline ~Lexeme() {}
 

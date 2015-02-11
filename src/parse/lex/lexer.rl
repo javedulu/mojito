@@ -40,19 +40,20 @@ Lexer::~Lexer()
 Lexeme *Lexer::consume(void)
 {
     %%{
-        ident               = [a-zA-Z$_][a-zA-Z0-9$_]*;
-
-        fract_const = [+\-]?digit* '.' digit+ | digit+ '.';
-        exponent = [eE] [+\-]? digit+;
-
-        float               = ( fract_const exponent? | digit+ exponent );
-        int                 = [+\-]?[0-9]+;
-        unsigned_number     = (int | float);
-
-        string              = ('"'([^"]|'\\' any)*'"'|'\''([^']|'\\' any)*'\'');
-
+		NONDIGIT         = [_a-zA-Z];
+        DIGIT            =[0-9];
+        QCHAR           = (NONDIGIT)+ | (DIGIT)+ | [!#$%&()*+,\-./:;<>=?@[\]\^{}|~ ];
+        SESCAPE         = '\\'[\'\"\?\\abfnrtv];
+        QIDENT          = "'" ( (QCHAR)+ | (SESCAPE)+ )+ "'";
+        IDENT            = (NONDIGIT)+ ( (DIGIT)+ | (NONDIGIT)+ )* | (QIDENT)+;
+        SCHAR           = [^\"\\];
+        STRING           = '"' ( (SCHAR)+ | (SESCAPE)+ )* '"';
+        UNSIGNED_INTEGER =(DIGIT)+;
+        UNSIGNED_NUMBER  =(UNSIGNED_INTEGER) ("." (UNSIGNED_INTEGER)? )? ([eE][+\-]? (UNSIGNED_INTEGER) )?;
+				
         spaces              = (' '|'\t')+;
         newline             = ('\r'|'\n');
+		
         exp_op              = ('.^'|'^');
         mul_op_partial      = ('./'|'/'|'*');
         add_op_partial      = ('.+'|'.-'|'-');
@@ -61,7 +62,8 @@ Lexeme *Lexer::consume(void)
         linecomment         =  '//'[^\n]*;
         blockcomment        = '/*' ( any* - (any* '*/' any* ) ) '*/';
         comment             = linecomment | blockcomment;
-        end_ident           = 'end'(spaces)ident;
+		
+        end_ident           = 'end'(spaces)IDENT;
         end_if              = 'end'(spaces)'if';
         end_for             = 'end'(spaces)'for';
         end_when            = 'end'(spaces)'when';
@@ -142,9 +144,9 @@ Lexeme *Lexer::consume(void)
         "within"                => { type = Lexeme::Type::WITHIN; fbreak;};
         
        
-        ident                   => { type = Lexeme::Type::IDENT; fbreak; };
-        string                  => { type = Lexeme::Type::STRING; fbreak; };
-        unsigned_number         => { type = Lexeme::Type::UNSIGNED_NUMBER; fbreak; };
+        IDENT                   => { type = Lexeme::Type::IDENT; fbreak; };
+        STRING                  => { type = Lexeme::Type::STRING; fbreak; };
+        UNSIGNED_NUMBER         => { type = Lexeme::Type::UNSIGNED_NUMBER; fbreak; };
         
         ".*"                    => { type = Lexeme::Type::DOT_STAR; fbreak;};
         ":="                    => { type = Lexeme::Type::ASSIGN_OP; fbreak;};
