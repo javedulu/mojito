@@ -24,17 +24,18 @@ Parser::~Parser()
 void Parser::exec()
 {
     std::string prompt= ">>>";
-    FILE *fp;
+    //FILE *fp;
     
-    fp = fopen("/Users/phryne/Desktop/out.txt","w");
-    umodParseTrace(fp,(char *)prompt.c_str());
+    //fp = fopen("/Users/phryne/Desktop/out.txt","w");
+    //umodParseTrace(fp,(char *)prompt.c_str());
     std::unique_ptr<lex::Lexeme> lexeme;
     bool parsing = true;
 
     while (parsing && !error())
     {
         lexeme.reset(m_lexer.consume());
-        if ((lexeme->type() != lex::Lexeme::Type::SPACES) && (lexeme->type()!=lex::Lexeme::Type::NEWLINE))
+        if ((lexeme->type() != lex::Lexeme::Type::SPACES) &&
+               (lexeme->type()!=lex::Lexeme::Type::NEWLINE))
         {
             
             //std::cout << lexeme->as<std::string>()

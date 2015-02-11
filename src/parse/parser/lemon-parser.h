@@ -1,11 +1,11 @@
 #define UMOD_LEXEME_TYPE_OR                              1
 #define UMOD_LEXEME_TYPE_AND                             2
 #define UMOD_LEXEME_TYPE_NOT                             3
-#define UMOD_LEXEME_TYPE_RELOP                           4
-#define UMOD_LEXEME_TYPE_ADDOP                           5
+#define UMOD_LEXEME_TYPE_REL_OP                          4
+#define UMOD_LEXEME_TYPE_ADD_OP_PARTIAL                  5
 #define UMOD_LEXEME_TYPE_PLUS                            6
 #define UMOD_LEXEME_TYPE_MUL_OP_PARTIAL                  7
-#define UMOD_LEXEME_TYPE_DOTSTAR                         8
+#define UMOD_LEXEME_TYPE_DOT_STAR                        8
 #define UMOD_LEXEME_TYPE_EXP_OP                          9
 #define UMOD_LEXEME_TYPE_WITHIN                         10
 #define UMOD_LEXEME_TYPE_SEMICOLON                      11

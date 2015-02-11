@@ -23,7 +23,7 @@ add_custom_command(OUTPUT
     DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/tools/lempar.c"
 )
 set (EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
-add_executable(lemon ${lemon_SOURCES})
+#add_executable(lemon ${lemon_SOURCES})
 
 add_custom_command(OUTPUT
     lemon-parser.cc
@@ -53,6 +53,7 @@ set(uModLexer_SOURCES
 
 set(uModParser_SOURCES
      lemon-parser.cc
+     lemon-parser.h
      parser/exception.cc
      parser/exception.h
      parser/parser.h

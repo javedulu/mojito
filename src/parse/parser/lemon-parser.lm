@@ -18,25 +18,26 @@
 }
 
 %syntax_error {
-    int n = sizeof(yyTokenName)/ sizeof(*yyTokenName);
-    for (int i = 0; i< n; i++)
-    {
-        int a = yy_find_shift_action(yypParser, static_cast<YYCODETYPE>(i));
-        if (a < YY_ERROR_ACTION)
+        int n = sizeof(yyTokenName)/ sizeof(*yyTokenName);
+        for (int i = 0; i< n; i++)
         {
-            parser->errors().push_back(yyTokenName[i]);
+            int a = yy_find_shift_action(yypParser, static_cast<YYCODETYPE>(i));
+            if (a < YY_ERROR_ACTION)
+            {
+                parser->errors().push_back(yyTokenName[i]);
+            }
         }
-    }
-    parser->error(true);
+        parser->error(true);
 }
 
+%stack_size 1000
 
 %left OR.
 %left AND.
 %right NOT.
-%left RELOP.
-%left ADDOP PLUS.
-%left MUL_OP_PARTIAL DOTSTAR.
+%left REL_OP.
+%left ADD_OP_PARTIAL PLUS.
+%left MUL_OP_PARTIAL DOT_STAR.
 %right EXP_OP.
 
 program ::= stored_definition.
@@ -116,7 +117,7 @@ import_clause ::= IMPORT IDENT EQUAL name comment.{}
 import_clause ::= IMPORT name opt_import_filter comment.{}
 
 opt_import_filter ::= .{}
-opt_import_filter ::= DOTSTAR .{}
+opt_import_filter ::= DOT_STAR .{}
 opt_import_filter ::= DOT STAR .{}
 opt_import_filter ::= DOT OBRACE import_list CBRACE.{}
 
@@ -313,23 +314,23 @@ basic_expression ::= primary .{}
 basic_expression ::= basic_expression OR basic_expression .{}
 basic_expression ::= basic_expression AND basic_expression .{}
 basic_expression ::= NOT basic_expression .{}
-basic_expression ::= basic_expression RELOP basic_expression .{}
+basic_expression ::= basic_expression REL_OP basic_expression .{}
 //basic_expression ::= basic_expression add_op basic_expression .{}
-basic_expression ::= basic_expression ADDOP basic_expression .{}
+basic_expression ::= basic_expression ADD_OP_PARTIAL basic_expression .{}
 basic_expression ::= basic_expression PLUS basic_expression .{}
 //basic_expression ::= add_op basic_expression .{}
-basic_expression ::= ADDOP basic_expression .{}
+basic_expression ::= ADD_OP_PARTIAL basic_expression .{}
 basic_expression ::= PLUS basic_expression .{}
 //basic_expression ::= basic_expression mul_op basic_expression .{}
 basic_expression ::= basic_expression MUL_OP_PARTIAL basic_expression .{}
-basic_expression ::= basic_expression DOTSTAR basic_expression .{}
+basic_expression ::= basic_expression DOT_STAR basic_expression .{}
 basic_expression ::= basic_expression EXP_OP basic_expression .{}
 
 //add_op::= ADDOP.{}
 //add_op::= PLUS.{}
 
 //mul_op::= MUL_OP_PARTIAL.{}
-//mul_op::= DOTSTAR.{}
+//mul_op::= DOT_STAR.{}
 
 primary ::= UNSIGNED_NUMBER.{}
 primary ::= STRING.{}
