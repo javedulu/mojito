@@ -8,7 +8,6 @@ namespace umod
         {
             class Visitor;
         }
-
         class Node 
         {
             public:

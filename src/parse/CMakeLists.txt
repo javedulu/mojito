@@ -59,8 +59,9 @@ set(uModParser_SOURCES
      parser/parser.h
      parser/parser.cc
      parser/lemon-parser.lm
-     parser/ast/node.h
-     parser/ast/tools/visitor.h
+     ast/node.h
+     ast/tools/visitor.h
+     ast/tools/print_visitor.h
 	)
 
 add_library(uModLexer STATIC ${uModLexer_SOURCES})

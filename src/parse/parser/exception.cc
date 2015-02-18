@@ -15,7 +15,7 @@ Exception::Exception(const std::string &message, const lex::Lexeme &lexeme, cons
 {
     std::ostringstream strstream;
 
-    strstream<<message<<" "<< lex::Lexeme::typeString(lexeme.type())<<" at line " << lexeme.position().first << " , column "<< lexeme.position().second;
+    strstream<<message<<" "<< lex::Lexeme::typeString(lexeme.type())<<" at line (" << lexeme.position().first << ","<< lexeme.position().second<<")";
 
     if (!expected_tokens.empty())
     {

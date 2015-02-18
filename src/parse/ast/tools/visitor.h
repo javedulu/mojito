@@ -2,14 +2,12 @@
 #define UMOD_AST_TOOLS_VISITOR_H_
 
 #include <stdexcept>
-
 namespace umod
 {
     namespace ast
     {
         class Node;
     }
-
     namespace tools 
     {
         class Visitor
@@ -23,5 +21,4 @@ namespace umod
         };
     }
 }
-
 #endif /* UMOD_AST_TOOLS_VISITOR_H_ */

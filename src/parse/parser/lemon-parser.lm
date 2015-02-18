@@ -12,22 +12,32 @@
     #include "parser.h"
     using namespace umod;
 }
-
+//https://www.sqlite.org/src/doc/trunk/doc/lemon.html
 %parse_accept {
-    std::cout<<"Parsing Complete !! \n";
+    std::cout<<"Parsing Complete !! \n ";
+}
+
+%parse_failure {
+    std::cerr<<"Giving up.  Parser is hopelessly lost :( \n";
+}
+
+%stack_overflow {
+    std::cerr<<"Giving up.  Parser stack overflow :( \n";
 }
 
 %syntax_error {
-        int n = sizeof(yyTokenName)/ sizeof(*yyTokenName);
-        for (int i = 0; i< n; i++)
-        {
-            int a = yy_find_shift_action(yypParser, static_cast<YYCODETYPE>(i));
-            if (a < YY_ERROR_ACTION)
+        #ifndef NDEBUG
+            int n = sizeof(yyTokenName)/ sizeof(*yyTokenName);
+            for (int i = 0; i< n; i++)
             {
-                parser->errors().push_back(yyTokenName[i]);
+                int a = yy_find_shift_action(yypParser, static_cast<YYCODETYPE>(i));
+                if (a < YY_ERROR_ACTION)
+                {
+                    parser->errors().push_back(yyTokenName[i]);
+                }
             }
-        }
-        parser->error(true);
+            parser->error(true);
+        #endif
 }
 
 %stack_size 1000
@@ -40,7 +50,7 @@
 %left MUL_OP_PARTIAL DOT_STAR.
 %right EXP_OP.
 
-program ::= stored_definition.
+program ::= stored_definition.{}
 
 /* B2.1 Stored Definition -- Within */
 stored_definition ::= . {}
@@ -349,12 +359,14 @@ primary_boolean ::= FALSE.{}
 primary_operator ::= DER .
 primary_operator ::= INITIAL .
 
+%type opt_name{std::vector<std::string>*}
+opt_name(A) ::= name(B) .{ if (B) A=B;}
 opt_name ::= .{}
-opt_name ::= name .{}
 
-name ::= IDENT. {}
-name ::= DOT IDENT.{}
-name ::= name DOT IDENT. {}
+%type name{std::vector<std::string>*}
+name(A) ::= name(B) DOT IDENT(C). { if (C) B->push_back(*C); A=B;}
+name(A) ::= DOT IDENT(B).{ if (B) A->push_back(*B);}
+name(A) ::= IDENT(B). { A= new std::vector<std::string>(); if (B) A->push_back(*B);}
 
 fname ::= component_reference.{}
 
@@ -412,8 +424,8 @@ comment ::= string_comment opt_annotation.{}
 string_comment ::= .{}
 string_comment ::= string_concatenation.{}
 
-string_concatenation ::= STRING .{}
 string_concatenation ::= string_concatenation PLUS STRING.{}
+string_concatenation ::= STRING .{}
 
 opt_annotation ::=.{}
 opt_annotation ::= annotation .{}

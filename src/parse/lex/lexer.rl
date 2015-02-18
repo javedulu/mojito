@@ -63,14 +63,14 @@ Lexeme *Lexer::consume(void)
         blockcomment        = '/*' ( any* - (any* '*/' any* ) ) '*/';
         comment             = linecomment | blockcomment;
 		
-        end_ident           = 'end'(spaces)IDENT;
-        end_if              = 'end'(spaces)'if';
-        end_for             = 'end'(spaces)'for';
-        end_when            = 'end'(spaces)'when';
-        end_while           = 'end'(spaces)'while';
-        initial_equation    = 'initial'(spaces)'equation';
-        initial_algorithm   = 'initial'(spaces)'algorithm';
-        operator_function   = 'operator'(spaces)'function';
+        end_ident           = 'end'(' '|'\t'|'\n')+IDENT;
+        end_if              = 'end'(' '|'\t'|'\n')'if';
+        end_for             = 'end'(' '|'\t'|'\n')'for';
+        end_when            = 'end'(' '|'\t'|'\n')'when';
+        end_while           = 'end'(' '|'\t'|'\n')'while';
+        initial_equation    = 'initial'(' '|'\t'|'\n')'equation';
+        initial_algorithm   = 'initial'(' '|'\t'|'\n')'algorithm';
+        operator_function   = 'operator'(' '|'\t'|'\n')'function';
 
         main := |*
         
@@ -142,7 +142,6 @@ Lexeme *Lexer::consume(void)
         "when"                  => { type = Lexeme::Type::WHEN; fbreak;};
         "while"                 => { type = Lexeme::Type::WHILE; fbreak;};
         "within"                => { type = Lexeme::Type::WITHIN; fbreak;};
-        
        
         IDENT                   => { type = Lexeme::Type::IDENT; fbreak; };
         STRING                  => { type = Lexeme::Type::STRING; fbreak; };
@@ -176,7 +175,7 @@ Lexeme *Lexer::consume(void)
         *|;
     }%%
 
-    Lexeme::Type type;
+    Lexeme::Type type = Lexeme::Type::SPACES;
 
     if (m_source == m_source_end)
     {
