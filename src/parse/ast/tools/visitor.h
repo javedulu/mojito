@@ -6,19 +6,24 @@ namespace umod
 {
     namespace ast
     {
-        class Node;
-    }
-    namespace tools 
-    {
-        class Visitor
+        class node;
+        class storedefn;
+        namespace tools
         {
-            public:
-                inline ~Visitor() {}
-                virtual inline void visit(ast::Node &node)
-                {
-                    throw std::runtime_error("Unknown AST branch (ast::Node).");
-                }
-        };
+            class Visitor
+            {
+                public:
+                    inline ~Visitor() {}
+                    virtual inline void visit(ast::node &node)
+                    {
+                        throw std::runtime_error("Unknown AST branch (ast::node).");
+                    }
+                    virtual inline void visit(ast::storedefn &storedefn)
+                    {
+                        throw std::runtime_error("Unknown AST branch (ast::storedefn).");
+                    }
+            };
+        }
     }
 }
 #endif /* UMOD_AST_TOOLS_VISITOR_H_ */

@@ -8,6 +8,8 @@ set(CMAKE_VERBOSE_MAKEFILE TRUE)
 
 set(WARN_BUILD TRUE)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
+
 #-----------------------------------------------------------------------------
 # Print system information
 

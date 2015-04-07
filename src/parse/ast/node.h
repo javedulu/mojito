@@ -8,10 +8,10 @@ namespace umod
         {
             class Visitor;
         }
-        class Node 
+        class node
         {
             public:
-                virtual ~Node() {}
+                virtual ~node() {}
                 virtual void accept(ast::tools::Visitor &visitor) = 0;
         };
     }

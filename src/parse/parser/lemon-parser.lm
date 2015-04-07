@@ -10,9 +10,18 @@
     #include <iostream>
     #include "lexeme.h"
     #include "parser.h"
+    
+    #include "ast/stored_defn.h"
     using namespace umod;
 }
 //https://www.sqlite.org/src/doc/trunk/doc/lemon.html
+//https://github.com/kanzure/brlcad/blob/master/doc/bison_to_lemon.txt
+//https://github.com/theory/mecssy/blob/master/src/parse.y
+//https://github.com/tz-lom/NTM/blob/master/library/NTM/CSS3Parser.y
+//https://github.com/omuses/moijs/blob/master/moparser.jison
+//%syntax_error { site:github.com  # Google search string
+
+
 %parse_accept {
     std::cout<<"Parsing Complete !! \n ";
 }
@@ -50,12 +59,23 @@
 %left MUL_OP_PARTIAL DOT_STAR.
 %right EXP_OP.
 
-program ::= stored_definition.{}
+program ::= stored_definition(A).{ parser->program(A);}
 
 /* B2.1 Stored Definition -- Within */
-stored_definition ::= . {}
-stored_definition ::= WITHIN opt_name SEMICOLON. {}
-stored_definition ::= stored_definition  opt_final class_definition SEMICOLON. {}
+%type stored_definition {ast::storedefn *}
+//stored_definition(A) ::= WITHIN opt_name(B) SEMICOLON. { A = new umod::ast::storedefn(); A->within = B;}
+//stored_definition(A) ::= stored_definition(B)  opt_final(C) class_definition(D) SEMICOLON. {}
+//stored_definition ::= WITHIN opt_name SEMICOLON. {  }
+stored_definition(A) ::= stored_definition(B)  opt_final(C) class_definition SEMICOLON. {
+    if (C)
+    {
+        std::cout<< "itsn't final ";
+        //D->isFinal = true;
+    }
+    A=B;
+}
+stored_definition ::= WITHIN opt_name SEMICOLON. { }
+stored_definition ::= .{} // TO REMOVE THiS AN use initialization in class itself
 
 
 /* B2.2 Class Defintion */
@@ -359,14 +379,12 @@ primary_boolean ::= FALSE.{}
 primary_operator ::= DER .
 primary_operator ::= INITIAL .
 
-%type opt_name{std::vector<std::string>*}
-opt_name(A) ::= name(B) .{ if (B) A=B;}
 opt_name ::= .{}
+opt_name ::= name .{}
 
-%type name{std::vector<std::string>*}
-name(A) ::= name(B) DOT IDENT(C). { if (C) B->push_back(*C); A=B;}
-name(A) ::= DOT IDENT(B).{ if (B) A->push_back(*B);}
-name(A) ::= IDENT(B). { A= new std::vector<std::string>(); if (B) A->push_back(*B);}
+name ::= IDENT. {}
+name ::= DOT IDENT.{}
+name ::= name DOT IDENT. {}
 
 fname ::= component_reference.{}
 
@@ -443,6 +461,7 @@ opt_expandable ::= .{}
 opt_expandable ::= EXPANDABLE.{}
 opt_inner ::= .{}
 opt_inner ::= INNER.{}
+
 opt_final ::= .{}
 opt_final ::= FINAL .{}
 opt_operator ::= .{}

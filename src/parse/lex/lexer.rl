@@ -203,6 +203,12 @@ Lexeme *Lexer::consume(void)
     {
         m_position.first += 1;
         m_position.second = size;
+        if (size >=2 && m_ts[0] == '\r' && m_ts[1] == '\n')
+        {
+            m_position.second -=2;
+        }else {
+            m_position.second -=1;
+        }
     }
     else
     {

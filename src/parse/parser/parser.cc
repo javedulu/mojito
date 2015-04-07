@@ -31,6 +31,12 @@ void Parser::exec()
         lexeme.reset(m_lexer.consume());
         if ((lexeme->type() != lex::Lexeme::Type::SPACES) && (lexeme->type()!=lex::Lexeme::Type::NEWLINE))
         {
+            std::cout << lexeme->as<std::string>()
+            << " @>> : ("
+            << lexeme->position().first<< ":" <<  lexeme->position().second
+            << ") @type:"<< lex::Lexeme::typeString(lexeme->type())
+            << std::endl;
+            
             umodParse(m_yyp, static_cast<int>(lexeme->type()), lexeme.get(), this);
             if (lexeme->type() == lex::Lexeme::Type::EOI)
             {

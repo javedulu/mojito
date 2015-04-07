@@ -39,6 +39,7 @@ add_custom_command(OUTPUT
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/lex)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/parser)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 
 set(uModLexer_SOURCES
@@ -60,6 +61,7 @@ set(uModParser_SOURCES
      parser/parser.cc
      parser/lemon-parser.lm
      ast/node.h
+     ast/stored_defn.h
      ast/tools/visitor.h
      ast/tools/print_visitor.h
 	)
