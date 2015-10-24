@@ -9,15 +9,17 @@ using namespace umod::lex;
 int main(int argc, char **argv)
 {
     
+    //std::string filename = (argc > 1 ? argv[1]:"/Users/phryne/Desktop/modelica-3.2.1.mo");
     std::string filename = (argc > 1 ? argv[1]:"/Users/phryne/Desktop/aide/test.mo");
-    //std::string filename = (argc > 1 ? argv[1]:"/Users/phryne/Desktop/buckboost.mo");
     
     std::ifstream ifs(filename, std::ifstream::in);
     std::string istr((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>()); //
     
     Lexer lexr(istr);
-    umod::parser::Parser _parser(lexr);
-    _parser.exec();
+    umod::parser::Parser parser(lexr);
+    parser.exec();
+    parser.program();
+    
     return 0;
 }
 

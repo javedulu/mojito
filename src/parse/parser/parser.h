@@ -5,7 +5,8 @@
 #include <vector>
 #include <string>
 #include "lexer.h"
-#include "../ast/stored_defn.h"
+#include "../ast/StoredDefinition.h"
+
 
 namespace umod
 {
@@ -33,11 +34,11 @@ namespace umod
                 {
                     return m_errors;
                 }
-                inline ast::storedefn *program(void) const
+                inline ast::StoredDefinition *program(void) const
                 {
                     return m_program;
                 }
-                inline Parser &program(ast::storedefn *program)
+                inline Parser &program(ast::StoredDefinition *program)
                 {
                     m_program = program;
                     return *this;
@@ -47,7 +48,7 @@ namespace umod
                 lex::Lexer &m_lexer;
                 bool m_error;
                 std::vector<std::string> m_errors;
-                ast::storedefn *m_program;
+                ast::StoredDefinition *m_program;
         };
     }
 }

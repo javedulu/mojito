@@ -10,47 +10,66 @@
     #include <iostream>
     #include "lexeme.h"
     #include "parser.h"
+    
+    #include "ast/StoredDefinition.h"
+    using namespace std;
     using namespace umod;
+    using namespace umod::ast;
 }
+//https://www.sqlite.org/src/doc/trunk/doc/lemon.html
+//https://github.com/kanzure/brlcad/blob/master/doc/bison_to_lemon.txt
+//https://github.com/theory/mecssy/blob/master/src/parse.y
+//https://github.com/tz-lom/NTM/blob/master/library/NTM/CSS3Parser.y
+//https://github.com/omuses/moijs/blob/master/moparser.jison
+//%syntax_error { site:github.com  # Google search string
+
 
 %parse_accept {
-    std::cout<<"Parsing Complete !! \n";
+    std::cout<<"Parsing Complete !! \n ";
+}
+
+%parse_failure {
+    std::cerr<<"Giving up.  Parser is hopelessly lost :( \n";
+}
+
+%stack_overflow {
+    std::cerr<<"Giving up.  Parser stack overflow :( \n";
 }
 
 %syntax_error {
-    int n = sizeof(yyTokenName)/ sizeof(*yyTokenName);
-    for (int i = 0; i< n; i++)
-    {
-        int a = yy_find_shift_action(yypParser, static_cast<YYCODETYPE>(i));
-        if (a < YY_ERROR_ACTION)
-        {
-            parser->errors().push_back(yyTokenName[i]);
-        }
-    }
-    parser->error(true);
+        #ifndef NDEBUG
+            int n = sizeof(yyTokenName)/ sizeof(*yyTokenName);
+            for (int i = 0; i< n; i++)
+            {
+                int a = yy_find_shift_action(yypParser, static_cast<YYCODETYPE>(i));
+                if (a < YY_ERROR_ACTION)
+                {
+                    parser->errors().push_back(yyTokenName[i]);
+                }
+            }
+            parser->error(true);
+        #endif
 }
 
+%stack_size 1000
 
 %left OR.
 %left AND.
 %right NOT.
-%left RELOP.
-%left ADDOP PLUS.
-%left MUL_OP_PARTIAL DOTSTAR.
+%left REL_OP.
+%left ADD_OP_PARTIAL PLUS.
+%left MUL_OP_PARTIAL DOT_STAR.
 %right EXP_OP.
 
-program ::= stored_definition.
-
+program ::= stored_definition.{}
 /* B2.1 Stored Definition -- Within */
-stored_definition ::= . {}
-stored_definition ::= WITHIN opt_name SEMICOLON. {}
-stored_definition ::= stored_definition  opt_final class_definition SEMICOLON. {}
-
+stored_definition ::= .{}
+stored_definition ::= WITHIN opt_name SEMICOLON.{}
+stored_definition ::= stored_definition  opt_final class_definition SEMICOLON.{}
 
 /* B2.2 Class Defintion */
 class_definition ::= opt_encapsulated class_prefixes class_specifier.{}
 class_prefixes ::= opt_partial kind.{}
-
 
 kind ::= CLASS.{}
 kind ::= MODEL.{}
@@ -116,7 +135,7 @@ import_clause ::= IMPORT IDENT EQUAL name comment.{}
 import_clause ::= IMPORT name opt_import_filter comment.{}
 
 opt_import_filter ::= .{}
-opt_import_filter ::= DOTSTAR .{}
+opt_import_filter ::= DOT_STAR .{}
 opt_import_filter ::= DOT STAR .{}
 opt_import_filter ::= DOT OBRACE import_list CBRACE.{}
 
@@ -313,23 +332,23 @@ basic_expression ::= primary .{}
 basic_expression ::= basic_expression OR basic_expression .{}
 basic_expression ::= basic_expression AND basic_expression .{}
 basic_expression ::= NOT basic_expression .{}
-basic_expression ::= basic_expression RELOP basic_expression .{}
+basic_expression ::= basic_expression REL_OP basic_expression .{}
 //basic_expression ::= basic_expression add_op basic_expression .{}
-basic_expression ::= basic_expression ADDOP basic_expression .{}
+basic_expression ::= basic_expression ADD_OP_PARTIAL basic_expression .{}
 basic_expression ::= basic_expression PLUS basic_expression .{}
 //basic_expression ::= add_op basic_expression .{}
-basic_expression ::= ADDOP basic_expression .{}
+basic_expression ::= ADD_OP_PARTIAL basic_expression .{}
 basic_expression ::= PLUS basic_expression .{}
 //basic_expression ::= basic_expression mul_op basic_expression .{}
 basic_expression ::= basic_expression MUL_OP_PARTIAL basic_expression .{}
-basic_expression ::= basic_expression DOTSTAR basic_expression .{}
+basic_expression ::= basic_expression DOT_STAR basic_expression .{}
 basic_expression ::= basic_expression EXP_OP basic_expression .{}
 
 //add_op::= ADDOP.{}
 //add_op::= PLUS.{}
 
 //mul_op::= MUL_OP_PARTIAL.{}
-//mul_op::= DOTSTAR.{}
+//mul_op::= DOT_STAR.{}
 
 primary ::= UNSIGNED_NUMBER.{}
 primary ::= STRING.{}
@@ -411,8 +430,8 @@ comment ::= string_comment opt_annotation.{}
 string_comment ::= .{}
 string_comment ::= string_concatenation.{}
 
-string_concatenation ::= STRING .{}
 string_concatenation ::= string_concatenation PLUS STRING.{}
+string_concatenation ::= STRING .{}
 
 opt_annotation ::=.{}
 opt_annotation ::= annotation .{}
@@ -430,6 +449,7 @@ opt_expandable ::= .{}
 opt_expandable ::= EXPANDABLE.{}
 opt_inner ::= .{}
 opt_inner ::= INNER.{}
+
 opt_final ::= .{}
 opt_final ::= FINAL .{}
 opt_operator ::= .{}

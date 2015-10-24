@@ -10,8 +10,29 @@
 
 namespace umod {
     namespace ast{
-        class classdefn: public ast::node
+        class ClassDefn : public ast::node
         {
+        public:
+            inline ClassDefn (const std::string &name): m_name(name){}
+           
+            inline ClassDefn &name (const std::string &name)
+            {
+                m_name = name;
+                return *this;
+            }
+            
+            inline const std::string &name(void) const{
+                return m_name;
+            }
+            
+            void accept (ast::tools::Visitor &visitor)
+            {
+                visitor.visit(*this);
+            }
+            
+            private :
+                std::string m_name;
+            
             /*
              this.restriction = ;
              this.isFinal = false;

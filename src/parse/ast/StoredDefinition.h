@@ -8,15 +8,18 @@
 
 namespace umod {
     namespace ast{
-        class storedefn: public ast::node
+        class StoredDefinition: public ast::node
         {
             public:
-                inline storedefn(const std::string &name, std::vector<std::string>* within): m_name(name), m_within(within){}
+                inline StoredDefinition(const std::string &name,
+                                        std::vector<std::string>* within):
+                                        m_name(name),m_within(within){}
                 inline const std::string &name(void) const
                 {
                     return m_name;
                 }
-                inline storedefn &name(const std::string &name)
+                inline StoredDefinition() {}
+                inline StoredDefinition &name(const std::string &name)
                 {
                     m_name = name;
                     return *this;
@@ -24,7 +27,7 @@ namespace umod {
                 inline std::vector<std::string> *within(void) const{
                     return m_within.get();
                 }
-                inline storedefn &within(std::vector<std::string>*within)
+                inline StoredDefinition &within(std::vector<std::string>*within)
                 {
                     m_within.reset(within); return *this;
                 }

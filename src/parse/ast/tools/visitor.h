@@ -7,7 +7,8 @@ namespace umod
     namespace ast
     {
         class node;
-        class storedefn;
+        class StoredDefinition;
+        class ClassDefn;
         namespace tools
         {
             class Visitor
@@ -18,9 +19,13 @@ namespace umod
                     {
                         throw std::runtime_error("Unknown AST branch (ast::node).");
                     }
-                    virtual inline void visit(ast::storedefn &storedefn)
+                    virtual inline void visit(ast::StoredDefinition &StoredDefinition)
                     {
-                        throw std::runtime_error("Unknown AST branch (ast::storedefn).");
+                        throw std::runtime_error("Unknown AST branch (ast::StoredDefinition).");
+                    }
+                    virtual inline void visit(ast::ClassDefn &ClassDefn)
+                    {
+                        throw std::runtime_error("Unknown AST branch (ast::ClassDefn).");
                     }
             };
         }

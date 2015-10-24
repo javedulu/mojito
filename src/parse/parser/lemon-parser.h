@@ -7,8 +7,8 @@
 #define UMOD_LEXEME_TYPE_MUL_OP_PARTIAL                  7
 #define UMOD_LEXEME_TYPE_DOT_STAR                        8
 #define UMOD_LEXEME_TYPE_EXP_OP                          9
-#define UMOD_LEXEME_TYPE_SEMICOLON                      10
-#define UMOD_LEXEME_TYPE_WITHIN                         11
+#define UMOD_LEXEME_TYPE_WITHIN                         10
+#define UMOD_LEXEME_TYPE_SEMICOLON                      11
 #define UMOD_LEXEME_TYPE_CLASS                          12
 #define UMOD_LEXEME_TYPE_MODEL                          13
 #define UMOD_LEXEME_TYPE_RECORD                         14
