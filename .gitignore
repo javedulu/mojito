@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+=======
+# Prerequisites
+*.d
+
+>>>>>>> 0a83576c0b750aeb1010c84a6fc74727cc65752e
 # Compiled Object files
 *.slo
 *.lo
@@ -15,6 +21,10 @@
 
 # Fortran module files
 *.mod
+<<<<<<< HEAD
+=======
+*.smod
+>>>>>>> 0a83576c0b750aeb1010c84a6fc74727cc65752e
 
 # Compiled Static libraries
 *.lai
@@ -26,8 +36,11 @@
 *.exe
 *.out
 *.app
+<<<<<<< HEAD
 
 build
 buildvm
 .DS_Store
 *.pyc
+=======
+>>>>>>> 0a83576c0b750aeb1010c84a6fc74727cc65752e
