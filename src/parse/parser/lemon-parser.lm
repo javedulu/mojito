@@ -42,7 +42,8 @@
             for (int i = 0; i< n; i++)
             {
                 int a = yy_find_shift_action(yypParser, static_cast<YYCODETYPE>(i));
-                if (a < YY_ERROR_ACTION)
+                //if (a < YY_ERROR_ACTION)
+                if (a < YYNSTATE + YYNRULE)
                 {
                     parser->errors().push_back(yyTokenName[i]);
                 }
@@ -61,33 +62,14 @@
 %left MUL_OP_PARTIAL DOT_STAR.
 %right EXP_OP.
 
-program ::= stored_definition(A).{ parser->program(A);}
+//program ::= stored_definition(A).{ parser->program(A);}
 
 /* B2.1 Stored Definition -- Within */
-%type stored_definition {ast::StoredDefinition *}
-stored_definition(A) ::= .{ A = new StoredDefinition(); }
-stored_definition(A) ::= WITHIN opt_name SEMICOLON. {
-    A = new StoredDefinition();
-}
-//stored_definition ::= stored_definition  opt_final class_definition SEMICOLON.{}
-stored_definition(A) ::= stored_definition(B)  opt_final(C) class_definition(D) SEMICOLON.
-{
-    cout<<B<<endl;
-    cout<<C<<endl;
-    cout<<D<<endl;
-    A = B;
-    /*if (B) C.isFinal = true;
-    if (!A.classDefinitionList)
-        A.classDefinitionList = new vector();
-        A.classDefinitionList.push(D);
-     */
-}
-/*program ::= stored_definition.{}
-%type stored_definition {ast::StoredDefinition *}
-stored_definition ::= stored_definition  opt_final class_definition SEMICOLON.{}
+program ::= stored_definition.{}
+
+stored_definition ::= .{}
 stored_definition ::= WITHIN opt_name SEMICOLON. {}
-stored_definition(A) ::= .{ A = new umod::ast::StoredDefinition(); }
-*/
+stored_definition ::= stored_definition  opt_final class_definition SEMICOLON.{}
 
 /* B2.2 Class Defintion */
 class_definition ::= opt_encapsulated class_prefixes class_specifier.{}
@@ -390,20 +372,12 @@ primary_boolean ::= FALSE.{}
 primary_operator ::= DER .
 primary_operator ::= INITIAL .
 
-%type opt_name { std::vector <std::string>* }
-opt_name(A) ::= .{ A = new std::vector<std::string>();}
-opt_name(A) ::= name(B) .{ if (B) A=B;}
+opt_name ::= .{}
+opt_name ::= name .{}
 
-%type name{std::vector<std::string>*}
-name(A) ::= IDENT(B). {
-    A = new std::vector<std::string>();
-    if(B){
-        A->push_back(*B);
-        std::cout<<"pusing ident"<<B->as<std::string>()<<std::endl;
-    }
-}
-name(A) ::= DOT IDENT(B).{ if (B) A->push_back(*B);}
-name ::= name(B) DOT IDENT(C). { if (C) B->push_back(*C);}
+name ::= IDENT. {}
+name ::= DOT IDENT. {}
+name ::= name DOT IDENT. {}
 
 fname ::= component_reference.{}
 

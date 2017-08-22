@@ -2,6 +2,17 @@
 
 using namespace umod::lex;
 
+/**
+ *  @author javedulu, 16-05-31 00:05:40
+ *
+ *  <#Description#>
+ *
+ *  @param type <#type description#>
+ *
+ *  @return <#return value description#>
+ *
+ *  @since <#version number#>
+ */
 const char *Lexeme::typeString(Lexeme::Type type)
 {
     switch (type)

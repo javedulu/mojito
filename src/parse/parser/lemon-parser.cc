@@ -75,9 +75,6 @@
 typedef union {
   int yyinit;
   umodParseTOKENTYPE yy0;
-  std::vector <std::string>* yy61;
-  ast::StoredDefinition * yy111;
-  std::vector<std::string>* yy157;
 } YYMINORTYPE;
 #ifndef YYSTACKDEPTH
 #define YYSTACKDEPTH 1000
@@ -1236,7 +1233,7 @@ static void yyStackOverflow(yyParser *yypParser, YYMINORTYPE *yypMinor){
 #line 35 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.lm"
 
     std::cerr<<"Giving up.  Parser stack overflow :( \n";
-#line 1240 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.c"
+#line 1237 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.c"
    umodParseARG_STORE; /* Suppress warning about unused %extra_argument var */
 }
 
@@ -1619,23 +1616,9 @@ static void yy_reduce(
   **     break;
   */
       case 0: /* program ::= stored_definition */
-#line 64 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.lm"
-{ parser->program(yymsp[0].minor.yy111);}
-#line 1625 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.c"
-        break;
-      case 1: /* stored_definition ::= */
-#line 68 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.lm"
-{ yygotominor.yy111 = new StoredDefinition(); }
-#line 1630 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.c"
-        break;
-      case 2: /* stored_definition ::= WITHIN opt_name SEMICOLON */
-#line 69 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.lm"
-{
-    yygotominor.yy111 = new StoredDefinition();
-}
-#line 1637 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.c"
-        break;
-      case 3: /* stored_definition ::= stored_definition opt_final class_definition SEMICOLON */
+      case 1: /* stored_definition ::= */ yytestcase(yyruleno==1);
+      case 2: /* stored_definition ::= WITHIN opt_name SEMICOLON */ yytestcase(yyruleno==2);
+      case 3: /* stored_definition ::= stored_definition opt_final class_definition SEMICOLON */ yytestcase(yyruleno==3);
       case 4: /* class_definition ::= opt_encapsulated class_prefixes class_specifier */ yytestcase(yyruleno==4);
       case 5: /* class_prefixes ::= opt_partial kind */ yytestcase(yyruleno==5);
       case 6: /* kind ::= CLASS */ yytestcase(yyruleno==6);
@@ -1833,117 +1816,81 @@ static void yy_reduce(
       case 198: /* primary ::= END */ yytestcase(yyruleno==198);
       case 199: /* primary_boolean ::= TRUE */ yytestcase(yyruleno==199);
       case 200: /* primary_boolean ::= FALSE */ yytestcase(yyruleno==200);
-#line 74 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.lm"
-{
-    cout<<yymsp[-3].minor.yy111<<endl;
-    cout<<yymsp[-2].minor.yy0<<endl;
-    cout<<yymsp[-1].minor.yy0<<endl;
-    yygotominor.yy111 = yymsp[-3].minor.yy111;
-    /*if (yymsp[-3].minor.yy111) yymsp[-2].minor.yy0.isFinal = true;
-    if (!yygotominor.yy111.classDefinitionList)
-        yygotominor.yy111.classDefinitionList = new vector();
-        yygotominor.yy111.classDefinitionList.push(yymsp[-1].minor.yy0);
-     */
-}
-#line 1849 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.c"
-        break;
-      case 203: /* opt_name ::= */
-#line 394 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.lm"
-{ yygotominor.yy61 = new std::vector<std::string>();}
-#line 1854 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.c"
-        break;
-      case 204: /* opt_name ::= name */
-#line 395 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.lm"
-{ if (yymsp[0].minor.yy157) yygotominor.yy61=yymsp[0].minor.yy157;}
-#line 1859 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.c"
-        break;
-      case 205: /* name ::= IDENT */
-#line 398 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.lm"
-{
-    yygotominor.yy157 = new std::vector<std::string>();
-    if(yymsp[0].minor.yy0){
-        yygotominor.yy157->push_back(*yymsp[0].minor.yy0);
-        std::cout<<"pusing ident"<<yymsp[0].minor.yy0->as<std::string>()<<std::endl;
-    }
-}
-#line 1870 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.c"
-        break;
-      case 206: /* name ::= DOT IDENT */
-#line 405 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.lm"
-{ if (yymsp[0].minor.yy0) yygotominor.yy157->push_back(*yymsp[0].minor.yy0);}
-#line 1875 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.c"
-        break;
-      case 207: /* name ::= name DOT IDENT */
-      case 208: /* fname ::= component_reference */ yytestcase(yyruleno==208);
-      case 209: /* component_reference ::= IDENT opt_array_subscripts */ yytestcase(yyruleno==209);
-      case 210: /* component_reference ::= DOT IDENT opt_array_subscripts */ yytestcase(yyruleno==210);
-      case 211: /* component_reference ::= component_reference DOT IDENT opt_array_subscripts */ yytestcase(yyruleno==211);
-      case 212: /* function_call_args ::= OPAREN opt_function_arguments CPAREN */ yytestcase(yyruleno==212);
-      case 213: /* opt_function_arguments ::= */ yytestcase(yyruleno==213);
-      case 214: /* opt_function_arguments ::= function_arguments */ yytestcase(yyruleno==214);
-      case 215: /* function_arguments ::= function_argument */ yytestcase(yyruleno==215);
-      case 216: /* function_arguments ::= function_argument COMMA function_arguments */ yytestcase(yyruleno==216);
-      case 217: /* function_arguments ::= function_argument FOR for_indices */ yytestcase(yyruleno==217);
-      case 218: /* function_arguments ::= named_arguments */ yytestcase(yyruleno==218);
-      case 219: /* opt_named_arguments ::= */ yytestcase(yyruleno==219);
-      case 220: /* opt_named_arguments ::= named_arguments */ yytestcase(yyruleno==220);
-      case 221: /* named_arguments ::= named_argument */ yytestcase(yyruleno==221);
-      case 222: /* named_arguments ::= named_argument COMMA named_arguments */ yytestcase(yyruleno==222);
-      case 223: /* named_argument ::= IDENT EQUAL function_argument */ yytestcase(yyruleno==223);
-      case 224: /* function_argument ::= FUNCTION name OPAREN opt_named_arguments CPAREN */ yytestcase(yyruleno==224);
-      case 225: /* function_argument ::= expression */ yytestcase(yyruleno==225);
-      case 226: /* output_expression_list ::= */ yytestcase(yyruleno==226);
-      case 227: /* output_expression_list ::= expression */ yytestcase(yyruleno==227);
-      case 228: /* output_expression_list ::= output_expression_list COMMA expression */ yytestcase(yyruleno==228);
-      case 229: /* output_expression_list ::= output_expression_list COMMA */ yytestcase(yyruleno==229);
-      case 230: /* opt_expression_list ::= */ yytestcase(yyruleno==230);
-      case 231: /* opt_expression_list ::= expression_list */ yytestcase(yyruleno==231);
-      case 232: /* expression_list ::= expression */ yytestcase(yyruleno==232);
-      case 233: /* expression_list ::= expression_list COMMA expression */ yytestcase(yyruleno==233);
-      case 234: /* expression_matrix ::= expression_list */ yytestcase(yyruleno==234);
-      case 235: /* expression_matrix ::= expression_matrix SEMICOLON expression_list */ yytestcase(yyruleno==235);
-      case 236: /* opt_array_subscripts ::= */ yytestcase(yyruleno==236);
-      case 237: /* opt_array_subscripts ::= array_subscripts */ yytestcase(yyruleno==237);
-      case 238: /* array_subscripts ::= OBRACKET subscripts CBRACKET */ yytestcase(yyruleno==238);
-      case 239: /* subscripts ::= subscript */ yytestcase(yyruleno==239);
-      case 240: /* subscripts ::= subscripts COMMA subscript */ yytestcase(yyruleno==240);
-      case 241: /* subscript ::= expression */ yytestcase(yyruleno==241);
-      case 242: /* subscript ::= COLON */ yytestcase(yyruleno==242);
-      case 243: /* comment ::= string_comment opt_annotation */ yytestcase(yyruleno==243);
-      case 244: /* string_comment ::= */ yytestcase(yyruleno==244);
-      case 245: /* string_comment ::= string_concatenation */ yytestcase(yyruleno==245);
-      case 246: /* string_concatenation ::= string_concatenation PLUS STRING */ yytestcase(yyruleno==246);
-      case 247: /* string_concatenation ::= STRING */ yytestcase(yyruleno==247);
-      case 248: /* opt_annotation ::= */ yytestcase(yyruleno==248);
-      case 249: /* opt_annotation ::= annotation */ yytestcase(yyruleno==249);
-      case 250: /* annotation ::= ANNOTATION class_modification */ yytestcase(yyruleno==250);
-      case 251: /* opt_annotation_semicolon ::= */ yytestcase(yyruleno==251);
-      case 252: /* opt_annotation_semicolon ::= annotation SEMICOLON */ yytestcase(yyruleno==252);
-      case 253: /* opt_each ::= */ yytestcase(yyruleno==253);
-      case 254: /* opt_each ::= EACH */ yytestcase(yyruleno==254);
-      case 255: /* opt_encapsulated ::= */ yytestcase(yyruleno==255);
-      case 256: /* opt_encapsulated ::= ENCAPSULATED */ yytestcase(yyruleno==256);
-      case 257: /* opt_expandable ::= */ yytestcase(yyruleno==257);
-      case 258: /* opt_expandable ::= EXPANDABLE */ yytestcase(yyruleno==258);
-      case 259: /* opt_inner ::= */ yytestcase(yyruleno==259);
-      case 260: /* opt_inner ::= INNER */ yytestcase(yyruleno==260);
-      case 261: /* opt_final ::= */ yytestcase(yyruleno==261);
-      case 262: /* opt_final ::= FINAL */ yytestcase(yyruleno==262);
-      case 263: /* opt_operator ::= */ yytestcase(yyruleno==263);
-      case 264: /* opt_operator ::= OPERATOR */ yytestcase(yyruleno==264);
-      case 265: /* opt_outer ::= */ yytestcase(yyruleno==265);
-      case 266: /* opt_outer ::= OUTER */ yytestcase(yyruleno==266);
-      case 267: /* opt_partial ::= */ yytestcase(yyruleno==267);
-      case 268: /* opt_partial ::= PARTIAL */ yytestcase(yyruleno==268);
-      case 269: /* opt_redeclare ::= */ yytestcase(yyruleno==269);
-      case 270: /* opt_redeclare ::= REDECLARE */ yytestcase(yyruleno==270);
-#line 406 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.lm"
-{ if (yymsp[0].minor.yy0) yymsp[-2].minor.yy157->push_back(*yymsp[0].minor.yy0);}
-#line 1943 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.c"
+#line 68 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.lm"
+{}
+#line 1822 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.c"
         break;
       default:
       /* (201) primary_operator ::= DER */ yytestcase(yyruleno==201);
       /* (202) primary_operator ::= INITIAL */ yytestcase(yyruleno==202);
+      /* (203) opt_name ::= */ yytestcase(yyruleno==203);
+      /* (204) opt_name ::= name */ yytestcase(yyruleno==204);
+      /* (205) name ::= IDENT */ yytestcase(yyruleno==205);
+      /* (206) name ::= DOT IDENT */ yytestcase(yyruleno==206);
+      /* (207) name ::= name DOT IDENT */ yytestcase(yyruleno==207);
+      /* (208) fname ::= component_reference */ yytestcase(yyruleno==208);
+      /* (209) component_reference ::= IDENT opt_array_subscripts */ yytestcase(yyruleno==209);
+      /* (210) component_reference ::= DOT IDENT opt_array_subscripts */ yytestcase(yyruleno==210);
+      /* (211) component_reference ::= component_reference DOT IDENT opt_array_subscripts */ yytestcase(yyruleno==211);
+      /* (212) function_call_args ::= OPAREN opt_function_arguments CPAREN */ yytestcase(yyruleno==212);
+      /* (213) opt_function_arguments ::= */ yytestcase(yyruleno==213);
+      /* (214) opt_function_arguments ::= function_arguments */ yytestcase(yyruleno==214);
+      /* (215) function_arguments ::= function_argument */ yytestcase(yyruleno==215);
+      /* (216) function_arguments ::= function_argument COMMA function_arguments */ yytestcase(yyruleno==216);
+      /* (217) function_arguments ::= function_argument FOR for_indices */ yytestcase(yyruleno==217);
+      /* (218) function_arguments ::= named_arguments */ yytestcase(yyruleno==218);
+      /* (219) opt_named_arguments ::= */ yytestcase(yyruleno==219);
+      /* (220) opt_named_arguments ::= named_arguments */ yytestcase(yyruleno==220);
+      /* (221) named_arguments ::= named_argument */ yytestcase(yyruleno==221);
+      /* (222) named_arguments ::= named_argument COMMA named_arguments */ yytestcase(yyruleno==222);
+      /* (223) named_argument ::= IDENT EQUAL function_argument */ yytestcase(yyruleno==223);
+      /* (224) function_argument ::= FUNCTION name OPAREN opt_named_arguments CPAREN */ yytestcase(yyruleno==224);
+      /* (225) function_argument ::= expression */ yytestcase(yyruleno==225);
+      /* (226) output_expression_list ::= */ yytestcase(yyruleno==226);
+      /* (227) output_expression_list ::= expression */ yytestcase(yyruleno==227);
+      /* (228) output_expression_list ::= output_expression_list COMMA expression */ yytestcase(yyruleno==228);
+      /* (229) output_expression_list ::= output_expression_list COMMA */ yytestcase(yyruleno==229);
+      /* (230) opt_expression_list ::= */ yytestcase(yyruleno==230);
+      /* (231) opt_expression_list ::= expression_list */ yytestcase(yyruleno==231);
+      /* (232) expression_list ::= expression */ yytestcase(yyruleno==232);
+      /* (233) expression_list ::= expression_list COMMA expression */ yytestcase(yyruleno==233);
+      /* (234) expression_matrix ::= expression_list */ yytestcase(yyruleno==234);
+      /* (235) expression_matrix ::= expression_matrix SEMICOLON expression_list */ yytestcase(yyruleno==235);
+      /* (236) opt_array_subscripts ::= */ yytestcase(yyruleno==236);
+      /* (237) opt_array_subscripts ::= array_subscripts */ yytestcase(yyruleno==237);
+      /* (238) array_subscripts ::= OBRACKET subscripts CBRACKET */ yytestcase(yyruleno==238);
+      /* (239) subscripts ::= subscript */ yytestcase(yyruleno==239);
+      /* (240) subscripts ::= subscripts COMMA subscript */ yytestcase(yyruleno==240);
+      /* (241) subscript ::= expression */ yytestcase(yyruleno==241);
+      /* (242) subscript ::= COLON */ yytestcase(yyruleno==242);
+      /* (243) comment ::= string_comment opt_annotation */ yytestcase(yyruleno==243);
+      /* (244) string_comment ::= */ yytestcase(yyruleno==244);
+      /* (245) string_comment ::= string_concatenation */ yytestcase(yyruleno==245);
+      /* (246) string_concatenation ::= string_concatenation PLUS STRING */ yytestcase(yyruleno==246);
+      /* (247) string_concatenation ::= STRING */ yytestcase(yyruleno==247);
+      /* (248) opt_annotation ::= */ yytestcase(yyruleno==248);
+      /* (249) opt_annotation ::= annotation */ yytestcase(yyruleno==249);
+      /* (250) annotation ::= ANNOTATION class_modification */ yytestcase(yyruleno==250);
+      /* (251) opt_annotation_semicolon ::= */ yytestcase(yyruleno==251);
+      /* (252) opt_annotation_semicolon ::= annotation SEMICOLON */ yytestcase(yyruleno==252);
+      /* (253) opt_each ::= */ yytestcase(yyruleno==253);
+      /* (254) opt_each ::= EACH */ yytestcase(yyruleno==254);
+      /* (255) opt_encapsulated ::= */ yytestcase(yyruleno==255);
+      /* (256) opt_encapsulated ::= ENCAPSULATED */ yytestcase(yyruleno==256);
+      /* (257) opt_expandable ::= */ yytestcase(yyruleno==257);
+      /* (258) opt_expandable ::= EXPANDABLE */ yytestcase(yyruleno==258);
+      /* (259) opt_inner ::= */ yytestcase(yyruleno==259);
+      /* (260) opt_inner ::= INNER */ yytestcase(yyruleno==260);
+      /* (261) opt_final ::= */ yytestcase(yyruleno==261);
+      /* (262) opt_final ::= FINAL */ yytestcase(yyruleno==262);
+      /* (263) opt_operator ::= */ yytestcase(yyruleno==263);
+      /* (264) opt_operator ::= OPERATOR */ yytestcase(yyruleno==264);
+      /* (265) opt_outer ::= */ yytestcase(yyruleno==265);
+      /* (266) opt_outer ::= OUTER */ yytestcase(yyruleno==266);
+      /* (267) opt_partial ::= */ yytestcase(yyruleno==267);
+      /* (268) opt_partial ::= PARTIAL */ yytestcase(yyruleno==268);
+      /* (269) opt_redeclare ::= */ yytestcase(yyruleno==269);
+      /* (270) opt_redeclare ::= REDECLARE */ yytestcase(yyruleno==270);
         break;
   };
   yygoto = yyRuleInfo[yyruleno].lhs;
@@ -1992,7 +1939,7 @@ static void yy_parse_failed(
 #line 31 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.lm"
 
     std::cerr<<"Giving up.  Parser is hopelessly lost :( \n";
-#line 1996 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.c"
+#line 1943 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.c"
   umodParseARG_STORE; /* Suppress warning about unused %extra_argument variable */
 }
 #endif /* YYNOERRORRECOVERY */
@@ -2014,14 +1961,15 @@ static void yy_syntax_error(
             for (int i = 0; i< n; i++)
             {
                 int a = yy_find_shift_action(yypParser, static_cast<YYCODETYPE>(i));
-                if (a < YY_ERROR_ACTION)
+                //if (a < YY_ERROR_ACTION)
+                if (a < YYNSTATE + YYNRULE)
                 {
                     parser->errors().push_back(yyTokenName[i]);
                 }
             }
             parser->error(true);
         #endif
-#line 2025 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.c"
+#line 1973 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.c"
   umodParseARG_STORE; /* Suppress warning about unused %extra_argument variable */
 }
 
@@ -2043,7 +1991,7 @@ static void yy_accept(
 #line 27 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.lm"
 
     std::cout<<"Parsing Complete !! \n ";
-#line 2047 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.c"
+#line 1995 "/Users/phryne/Desktop/mojito/src/parse/parser/lemon-parser.c"
   umodParseARG_STORE; /* Suppress warning about unused %extra_argument variable */
 }
 
